@@ -4,17 +4,17 @@
             <div class="box-wrapper text-center">
                 <h3 class="title">{{'print-dashboard-component.Issued-Prints' | translate}}</h3>
                 <div class="gray-separator"></div>
-                <div class="print-info">
+                <div class="print-info" *ngIf="user && user.roles && roles">
                     <button type="button" class="button print-btn mb-2"
-                        (click)="printInfo(printTypes.IP)">{{'print-dashboard-component.Print' | translate}}</button>
+                        (click)="printInfo(printTypes.IP)" *ngIf="roles.ipPrint && docInfo">{{'print-dashboard-component.Print' | translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="rePrintInfo(printTypes.IP)">{{'print-dashboard-component.Reprint' |
+                        (click)="rePrintInfo(printTypes.IP)" *ngIf="roles.ipReprint">{{'print-dashboard-component.Reprint' |
                         translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="redirectToAuditTrail(printTypes.IP)">{{'print-dashboard-component.Audit' |
+                        (click)="redirectToAuditTrail(printTypes.IP)" *ngIf="roles.ipAudit" >{{'print-dashboard-component.Audit' |
                         translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="rePrintInfo(printTypes.IP, false, true)">{{'print-dashboard-component.Reconciliation' |
+                        (click)="rePrintInfo(printTypes.IP, false, true)" *ngIf="roles.reconciliation">{{'print-dashboard-component.Reconciliation' |
                         translate}}</button>
                 </div>
             </div>
@@ -23,17 +23,16 @@
             <div class="box-wrapper text-center">
                 <h3 class="title">{{'print-dashboard-component.Controlled-Prints'| translate}}</h3>
                 <div class="gray-separator"></div>
-                <!-- *ngIf="user && user.roles && roles" -->
-                <div class="print-info" >
+                <div class="print-info" *ngIf="user && user.roles && roles">
                     <button type="button" class="button print-btn mb-2"
-                        (click)="printInfo(printTypes.CP)">{{'print-dashboard-component.Print'| translate}}</button>
+                        (click)="printInfo(printTypes.CP)" *ngIf="roles.cpPrint  && docInfo">{{'print-dashboard-component.Print'| translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="rePrintInfo(printTypes.CP)">{{'print-dashboard-component.Reprint'| translate}}</button>
+                        (click)="rePrintInfo(printTypes.CP)" *ngIf="roles.cpReprint">{{'print-dashboard-component.Reprint'| translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="redirectToAuditTrail(printTypes.CP)">{{'print-dashboard-component.Audit'|
+                        (click)="redirectToAuditTrail(printTypes.CP)" *ngIf="roles.cpAudit">{{'print-dashboard-component.Audit'|
                         translate}}</button>
                     <button type="button" class="button print-btn mb-2"
-                        (click)="rePrintInfo(printTypes.CP, true, false)">{{'print-dashboard-component.Recall'|
+                        (click)="rePrintInfo(printTypes.CP, true, false)" *ngIf="roles.recall">{{'print-dashboard-component.Recall'|
                         translate}}</button>
                 </div>
             </div>
