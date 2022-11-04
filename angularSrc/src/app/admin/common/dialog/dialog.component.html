@@ -1,0 +1,30 @@
+<mat-dialog-content>
+	<div *ngIf="showUserInput">
+		<p>{{'admin.internalUser.deleteMassage' |translate}}</p>
+		<mat-form-field class="full-width">
+			<mat-label>{{'admin.internalUser.Internal-User' | translate}}</mat-label>
+			<input type="text" maxlength="70" matInput required [(ngModel)]="selectedUser" [matAutocomplete]="auto"
+				(ngModelChange)="filterRecipientsList()" name="userName" #firstName="ngModel">
+			<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+				<mat-option *ngFor="let recipient of recipients | async" [value]="recipient">
+					{{recipient.label}}
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+		<mat-error *ngIf="error.name === 'required'">
+			{{'admin.internalUser.Internal-User-Name-is-required' | translate}}
+		</mat-error>
+	</div>
+	<div *ngIf="!showUserInput">
+		<p>
+			{{message}}
+		</p>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+	<button *ngIf="showUserInput" mat-raised-button (click)="assignUser()"
+		class="button mr-2">{{confirmButtonText}}</button>
+	<button *ngIf="!showUserInput" mat-raised-button (click)="onConfirmClick()"
+		class="button">{{confirmButtonText}}</button>
+	<button mat-raised-button mat-dialog-close class="button">{{cancelButtonText}}</button>
+</mat-dialog-actions>

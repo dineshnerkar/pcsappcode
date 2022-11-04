@@ -1,0 +1,111 @@
+@import "../../color-variable.scss";
+
+.header {
+  //   -webkit-box-shadow: 0 0.0625rem 0.625rem rgba(0, 0, 0, 0.58);
+  //      box-shadow: 0 0.0625rem 0.625rem rgba(0, 0, 0, 0.58);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+  background-color: $dark-gray-color;
+  border-bottom: 2px solid $gray-color;
+  .navbar {
+    padding: 10px 0;
+    .navbar-brand {
+      font-size: 1.3rem;
+      font-weight: 600;
+      position: relative;
+      padding-right: 1rem;
+      color: $white-color;
+    }
+    .mat-slide-toggle-content {
+      font-size: 16px;
+      color: $white-color;
+      margin-right: 10px;
+    }
+    .mat-slide-toggle-label {
+      padding-left: 25px;
+    }
+    .mat-slide-toggle.mat-checked .mat-ripple-element {
+      background-color: #6c757d !important;
+    }
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+      background-color: #2e3235 !important;
+    }
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+      background-color: $orange-color !important;
+    }
+    .side-menu {
+      margin-right: 10px;
+      .menu-icon {
+        background-image: url("../../assets/images/bars-solid.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 10px;
+      }
+    }
+    .user-info {
+      .user-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        position: relative;
+        padding-right: 10px;
+        color: $white-color;
+        margin-bottom: 0;
+      }
+      .user-role {
+        font-size: 16px;
+        color: $white-color;
+        margin-right: 10px;
+      }
+      .user-profile {
+        height: 24px;
+        width: 24px;
+        background-color: $orange-color;
+        border-radius: 0.1875rem;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        img {
+          display: block;
+          width: 100%;
+        }
+        .user-img {
+          background-image: url("../../assets/images/user-solid.svg");
+          background-position: center;
+          background-repeat: no-repeat;
+          padding: 11px;
+          display: block;
+          background-size: 11px;
+        }
+      }
+      .notification .fa {
+        position: relative;
+        display: block;
+      }
+      span.notification-count {
+        cursor: pointer;
+        padding: 3px 2px 1px 1px;
+        text-align: center;
+        min-height: 20px;
+        min-width: 20px;
+        background-color: $orange-color;
+        border-radius: 0.1875rem;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        margin-left: 10px;
+        font-weight: 500;
+        font-size: 10px;
+      }
+    }
+    .secondary-logo {
+      font-size: 1.3rem;
+      font-weight: 600;
+      position: relative;
+      padding-right: 1rem;
+      color: $white-color;
+    }
+  }
+}

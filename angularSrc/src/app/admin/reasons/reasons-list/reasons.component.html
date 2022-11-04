@@ -1,0 +1,45 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'reasons-component.Loading' | translate}}</div>
+</div>
+<form class="reason-popup" #form="ngForm" (ngSubmit)="addReason()">
+    <div class="d-flex">
+        <div>
+            <h3 *ngIf="!isUpdate">{{'reasons-component.Add-New-Reasons' | translate}}</h3>
+            <h3 *ngIf="isUpdate">{{'reasons-component.Update-Reasons' | translate}}</h3>
+        </div>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="box-wrapper">
+            <mat-form-field class="full-width">
+                <mat-label>{{'reasons-component.Reason-Text' | translate}}</mat-label>
+                <input matInput type="text" maxlength="70" required [(ngModel)]="reason.name" name="reasonText"
+                    #reasonText="ngModel" />
+                <mat-error *ngIf="reasonText.errors">
+                    {{'reasons-component.Reason-Name-is-required' | translate}}
+                </mat-error>
+            </mat-form-field>
+            <h5>{{'reasons-component.Applicable-For' | translate}}:</h5>
+            <mat-checkbox [(ngModel)]="reason.print" name="print">
+                {{'reasons-component.Print' | translate}}
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="reason.reprint" name="reprint">
+                {{'reasons-component.Reprint' | translate}}
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="reason.recall" name="recall">
+                {{'reasons-component.Recall' | translate}}
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="reason.reconcile" name="reconcile">
+                {{'reasons-component.Reconcile' | translate}}
+            </mat-checkbox>
+            <mat-error *ngIf="error.applicableFor === 'required'">
+                {{'reasons-component.Please-Select-at-Least-One-Option' | translate}}
+            </mat-error>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-button mat-dialog-close type="button" class="button mr-1">{{'reasons-component.Cancel' |
+            translate}}</button>
+        <button mat-button cdkFocusInitial [type]="'submit'" [disabled]="form.invalid" class="button ml-1">{{'reasons-component.Save' |
+            translate}}</button>
+    </mat-dialog-actions>
+</form>

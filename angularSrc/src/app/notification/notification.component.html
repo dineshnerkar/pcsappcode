@@ -1,0 +1,107 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'notification-components.Loading' | translate}}</div>
+</div>
+
+<div class="main-container notification">
+    <div class="container-fluid">
+        <div class="box-wrapper">
+            <mat-drawer-container class="notification-container" autosize>
+                <mat-drawer class="notification-sidenav" opened mode="side">
+                    <p>{{'notification-components.Notification-List' | translate}}</p>
+                    <mat-list *ngFor="let notification of notificationList;let i= index;">
+                        <mat-list-item class="notification-item"
+                            [ngClass]="{'selected-notification': (selectedIndex == i),'notSeen':!notification.isSeen}"
+                            (click)="setSelected(i)">
+                            {{notification.notificationText}}
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </mat-list>
+                </mat-drawer>
+                <div class="notification-sidenav-content col-md-12 row" *ngIf="notification">
+                    <div class="notification-table col-md-12 row notification-row">
+                        <span>
+                            {{ 'notification-components.notification-table-span' | translate }}<b>'{{ 'notification-components.notification-table-span-b' | translate
+                                }}'</b>.
+                        </span>
+                        <table mat-table [dataSource]="recallList" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Controlled_Print">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{'notification-components.table-th1' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.printCopyNo}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Reason">
+                                <th mat-header-cell *matHeaderCellDef>{{'notification-components.table-th2' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{notification.docInfo.recallInfo.recallReason}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Status">
+                                <th mat-header-cell *matHeaderCellDef>{{'notification-components.table-th3' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{notification.docInfo.recallInfo.recallStatus}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Initiation_Date">
+                                <th mat-header-cell *matHeaderCellDef>{{'notification-components.table-th4' | translate}}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{notification.docInfo.recallInfo.recallInitiationDate | date:'d/M/yyyy, h:mm:ss
+                                    a'}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Completion_Date">
+                                <th mat-header-cell *matHeaderCellDef>{{'notification-components.table-th5' | translate}}</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{notification.docInfo.recallInfo.recallCompletionDate?
+                                    (notification.docInfo.recallInfo.recallCompletionDate| date:'d/M/yyyy, h:mm:ss a') :
+                                    '--'}} </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-12 row notification-row">
+                        <div class="col-md-5">
+                            <button type="button" [disabled]="notification.isSeen" (click)="openPopup()"
+                                class="button btn-width">
+                                {{'notification-components.Complete-Recall' | translate}}
+                            </button>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <div *ngIf="!notification">
+                        {{'notification-components.No-Notification-Selected' | translate}}
+                    </div>
+                </div>
+
+            </mat-drawer-container>
+            <div class="modal fade-bg" *ngIf="showPopup">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{'notification-components.h5-Complete-Recall' | translate}}</h5>
+                            <button type="button" class="close" (click)="closePopup()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>{{'notification-components.Comments' | translate}}</mat-label>
+                                    <input type="text" matInput name="recallReasonName" [(ngModel)]="recallComment" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="text-center">
+                                <button type="button" class="button" (click)="completeRecall()">{{'notification-components.Continue'|
+                                    translate}}</button>
+                                <button type="button" (click)="closePopup()" class="button">{{'notification-components.Cancel' |
+                                    translate}}</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

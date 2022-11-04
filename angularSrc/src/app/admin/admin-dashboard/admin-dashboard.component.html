@@ -1,0 +1,96 @@
+<div class="dash-main d-flex align-items-center">
+    <div class="row w-100">
+        <div class="col-md-10 offset-md-1">
+            <h3 style="padding-top: 30px; color: var(--black-color, #232D33);"> {{'admin.admin-dashboard-component.Configuration-Module' | translate}} </h3>
+            <div class="box-wrapper text-center">
+                <div class="print-info">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('user-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Internal-Users' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle (click)="openActiveModel($event)">
+                                        <a class="active-class">
+                                            {{'admin.admin-dashboard-component.Active' | translate}} : {{intUserCount}}
+                                        </a>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+                            </mat-card>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('profile-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Profiles' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+
+                            </mat-card>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('profile-mapping-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Profile-Mapping' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('reasons-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Reasons' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+
+                            </mat-card>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('printer-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Printers' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+
+                            </mat-card>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('ext-user-list')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.External-Users' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-card class="example-card" (click)="goto('admin-audit')">
+                                <mat-card-title-group align="left">
+                                    <mat-card-title>{{'admin.admin-dashboard-component.Audit' | translate}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>
+                                    </mat-card-subtitle>
+                                </mat-card-title-group>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

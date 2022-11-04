@@ -1,0 +1,28 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'internal-user-list-component.Loading' | translate}}</div>
+</div>
+<div class="d-flex">
+    <div>
+        <h3 *ngIf="!isUpdate">{{'external-user-component.Add-New-External-User' | translate}}</h3>
+        <h3 *ngIf="isUpdate">{{'external-user-component.Update-External-User' | translate}}</h3>
+    </div>
+</div>
+<mat-dialog-content class="mat-typography">
+    <div class="box-wrapper">
+        <mat-form-field class="full-width">
+            <mat-label>{{'external-user-component.External-User' | translate}} </mat-label>
+            <input type="text" maxlength="70" matInput required  [matAutocomplete]="auto" [(ngModel)]="user" (ngModelChange)="filterRecipientsList()">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+                <mat-option *ngFor="let option of filterUserList | async" [value]="option">
+                    {{option.label}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close type="button" class="button mr-2">{{'external-user-component.Cancel' |
+        translate}}</button>
+    <button mat-button type="button" cdkFocusInitial class="button" (click)="addExternalUser()">{{'external-user-component.Save' |
+        translate}}</button>
+</mat-dialog-actions>

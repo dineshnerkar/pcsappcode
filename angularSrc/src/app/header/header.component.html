@@ -1,0 +1,50 @@
+<div class="header">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg justify-content-between">
+            <div class="d-flex align-items-center">
+                <a class="side-menu" href="javascript:void" (click)="changeView()">
+                    <span class="menu-icon"></span>
+                </a>
+                <a class="navbar-brand" href="javascript:void" (click)="changeView()">
+                    {{ 'header-component.Home' | translate }}
+                </a>
+                <select class="px-4 rounded btn-secondary cursor" #selectedLang [(ngModel)]="lang"
+                    (change)="switchLang(selectedLang.value)" name="lang">
+                    <option *ngFor="let language of langList" [value]="language.value">
+                        {{ language.label }}
+                    </option>
+                </select>
+                <span *ngIf="isAdminUser">
+                    <mat-slide-toggle name="isAdminView" (change)="changeView()" [(ngModel)]="isAdminView">{{ 'header-component.asAdmin' | translate }}
+                    </mat-slide-toggle>
+                </span>
+            </div>
+            <div class="user-info d-flex align-items-center" *ngIf="user && user.formattedName">
+                <p class="user-title">{{user?.formattedName}}</p>
+                <div class="user-profile">
+                    <a class="user-img"></a>
+                </div>
+                <div class="notification">
+                    <i class="fa fa-bell cursor" (click)="gotoNotification()"></i>
+                    <span [ngClass]="{'notification-count': (notificationCount > 0) }">{{notificationCount > 0 ?
+                        notificationCount: ''}}</span>
+                </div>
+            </div>
+            <div class="user-info" *ngIf="docInfo && docInfo['@infocardNumber']">
+                <div class="user-role">
+                    {{ 'header-component.Document' | translate }} : {{docInfo["@infocardNumber"]}}
+                </div>
+            </div>
+            <div class="user-info" *ngIf="docInfo && docInfo['@revision']">
+                <div class="user-role">
+                    {{ 'header-component.Revision' | translate }} : {{ docInfo["@revision"]}}
+                </div>
+            </div>
+            <div>
+                <a class="secondary-logo" href="#">
+                    {{'header-component.Impact-Systems'| translate}}
+                </a>
+            </div>
+        </nav>
+    </div>
+</div>

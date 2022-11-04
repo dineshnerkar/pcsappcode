@@ -1,0 +1,27 @@
+<div *ngIf="loading" class="loader-wrapper">
+  <div class="loader">{{'reprint-component.Loading' | translate}}</div>
+</div>
+<div class="d-flex">
+  <div>
+    <h3>{{'profile-template-component.Add-Template-from-Existing-Profile' | translate}}</h3>
+  </div>
+</div>
+<mat-dialog-content class="mat-typography">
+  <div class="box-wrapper">
+    <mat-form-field class="full-width">
+      <mat-label>{{'profile-template-component.Template-Name' | translate}}</mat-label>
+      <input type="text" name="template" maxlength="70" matInput required [(ngModel)]="template"
+        (ngModelChange)="filterRecipientsList()" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+        <mat-option *ngFor="let template of templateFilterList | async" [value]="template">
+          {{template.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close class="button mr-2">{{'profile-template-component.Cancel' | translate}}</button>
+  <button mat-button type="button" (click)="addTemplateToProfile()" cdkFocusInitial
+    class="button">{{'profile-template-component.Save' | translate}}</button>
+</mat-dialog-actions>

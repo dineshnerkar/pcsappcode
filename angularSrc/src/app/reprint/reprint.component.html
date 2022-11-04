@@ -1,0 +1,627 @@
+<div class="reprint">
+  <div *ngIf="loader" class="loader-wrapper">
+    <div class="loader">{{'reprint-component.Loading' | translate}}</div>
+  </div>
+  <div class="main-container">
+    <div class="container-fluid">
+      <div class="box-wrapper">
+        <div class="d-flex">
+          <div class="col-md-5">
+            <!-- <h3>{{(printType === 'IP' ? ((reprintDashboardType && reprintDashboardType === 'Reconciliation') ?
+              'reprint-component.Issued-reprint' : 'reprint-component.Issued' ): ((reprintDashboardType &&
+              reprintDashboardType === 'Recall') ? 'reprint-component.Controlled-reprint' :
+              'reprint-component.Controlled')) | translate }}
+              {{'reprint-component.Print-Dashboard' | translate}}</h3> -->
+            <h3>{{(printType === 'IP' ? 'reprint-component.Issued' : 'reprint-component.Controlled') | translate }}
+              {{(printType === 'IP' ? ((reprintDashboardType && reprintDashboardType === 'Reconciliation') ?
+              'reprint-component.Print-Dashboard-Reconciliation' : 'reprint-component.Print-Dashboard' ):
+              ((reprintDashboardType &&
+              reprintDashboardType === 'Recall') ? 'reprint-component.Print-Dashboard-Recall' :
+              'reprint-component.Print-Dashboard')) | translate}}</h3>
+          </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-1" (click)="downloadReport()">
+            <i class="fa fa-file-excel-o fa-icon" [ngStyle]="{'color':'green'}"
+              matTooltip="{{'audit-trail-component.downloadAsExcel' | translate}}" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-1" (click)="downloadAsPDF()">
+            <i class="fa fa-file-pdf-o fa-icon" [ngStyle]="{'color':'red'}"
+              matTooltip="{{'audit-trail-component.downloadAsPdf' | translate}}" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-3">
+            <button type="button" *ngIf="selection?.selected?.length && printType === 'CP'" (click)="reCall()"
+              class="button btn-width">
+              {{'reprint-component.Recall' | translate}}
+            </button>
+            <button type="button" *ngIf="selection?.selected?.length && printType === 'IP'" (click)="reconciliation()"
+              class="button btn-width">
+              {{'reprint-component.Reconciliation' | translate}}
+            </button>
+          </div>
+        </div>
+        <div class="title-border"></div>
+        <form name="myForm" #f="ngForm" novalidate>
+          <div class="row">
+            <div class="col-md-2 filter-width">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.Document-Name' | translate}}
+                </mat-label>
+                <input matInput name="documentName" [(ngModel)]="filterConstant.documentName" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 filter-width">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.revision' | translate}}
+                </mat-label>
+                <input matInput name="revision" [(ngModel)]="filterConstant.revision" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 filter-width">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.printNumber' | translate}}
+                </mat-label>
+                <input matInput name="printNumber" [(ngModel)]="filterConstant.printNumber" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 filter-width">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.Print-Owner' | translate}}</mat-label>
+                <input matInput name="Print_Owner" [(ngModel)]="filterConstant.printOwner"
+                  [matAutocomplete]="PrintOwner" (ngModelChange)="filterPrintOwnerList()" />
+                <mat-autocomplete #PrintOwner="matAutocomplete">
+                  <mat-option *ngFor="let item of printOwnerList | async" [value]="item.value">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 filter-width">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.reprint-component-Recipients' | translate}}</mat-label>
+                <input matInput name="recipientFil" [(ngModel)]="filterConstant.recipient" [matAutocomplete]="auto"
+                  (ngModelChange)="filterRecipientsList()" />
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let recipient of recipients | async" [value]="recipient.value">
+                    {{ recipient.label }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.print-profile' | translate}}</mat-label>
+                <mat-select name="print-profile-option" [(ngModel)]="filterConstant.profile"
+                  placeholder="{{'reprint-component.print-profile' | translate}}">
+                  <mat-option *ngFor="let profile of profileList" [value]="profile.name">{{profile.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row" *ngIf="!reprintDashboardType">
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.Status' | translate}}</mat-label>
+                <mat-select name="status" [(ngModel)]="filterConstant.printStatus"
+                  placeholder="{{'reprint-component.Status' | translate}}">
+                  <mat-option [value]="'Failed'">{{'reprint-component.Failed' | translate}}</mat-option>
+                  <mat-option [value]="'Successful'">{{'reprint-component.Successful' | translate}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.Start-Date' | translate}}</mat-label>
+                <input [(ngModel)]="filterConstant.startDate" name="sDate" matInput [matDatepicker]="startPicker"
+                  placeholder="{{'reprint-component.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.End-Date' | translate}}</mat-label>
+                <input [(ngModel)]="filterConstant.endDate" [disabled]="!filterConstant.startDate" name="eDate" matInput
+                  [matDatepicker]="endPicker" placeholder="{{'reprint-component.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <div class="text-right d-flex">
+                <button type="submit" [disabled]="f.invalid" (click)="applyFilter()" class="button btn-width">
+                  {{'reprint-component.Apply-Filter' | translate}}
+                </button>
+                <button type="button" (click)="clearFilter()" class="button btn-width">
+                  {{'reprint-component.Clear' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="reprintDashboardType && reprintDashboardType === 'Recall'">
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.RecallStatus' | translate}}</mat-label>
+                <mat-select name="RecallStatus" [(ngModel)]="filterConstant.recallStatus"
+                  placeholder="{{'reprint-component.RecallStatus' | translate}}">
+                  <mat-option [value]="'Complete'">{{'reprint-component.Complete' | translate}}</mat-option>
+                  <mat-option [value]="'In-Progress'">{{'reprint-component.In-Progress' | translate}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.Start-Date' | translate}}</mat-label>
+                <input [(ngModel)]="filterConstant.startDate" name="sDate" matInput [matDatepicker]="startPicker"
+                  placeholder="{{'reprint-component.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.End-Date' | translate}}</mat-label>
+                <input [(ngModel)]="filterConstant.endDate" [disabled]="!filterConstant.startDate" name="eDate" matInput
+                  [matDatepicker]="endPicker" placeholder="{{'reprint-component.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <div class="text-right d-flex">
+                <button type="submit" [disabled]="f.invalid" (click)="applyFilter()" class="button btn-width">
+                  {{'reprint-component.Apply-Filter' | translate}}
+                </button>
+                <button type="button" (click)="clearFilter()" class="button btn-width">
+                  {{'reprint-component.Clear' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="reprintDashboardType && reprintDashboardType === 'Reconciliation'">
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.Reconciliation-Due-Date' | translate}}</mat-label>
+                <input [(ngModel)]="filterConstant.reconciliationDueDate" name="rDate" matInput
+                  [matDatepicker]="startPicker" placeholder="{{'reprint-component.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width">
+              <mat-form-field>
+                <mat-label>{{'reprint-component.Reconciliation-Status' | translate}}</mat-label>
+                <mat-select name="rStatus" [(ngModel)]="filterConstant.reconciliationStatus"
+                  placeholder="Reconciliation Status">
+                  <mat-option [value]="'Incomplete Recovery'">{{'reprint-component.Incomplete-Recovery'| translate}}
+                  </mat-option>
+                  <mat-option [value]="'Complete'">{{'reprint-component.Complete' | translate}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 filter-width custom-label">
+              <mat-label>{{'reprint-component.Reconciliation-Overdue'| translate}}</mat-label>
+              <br>
+              <mat-radio-group matInput [(ngModel)]="filterConstant.overdue" name="overDueR"
+                aria-label="Select an option">
+                <mat-radio-button value="true">{{'reprint-component.Yes' | translate}}</mat-radio-button>
+                <mat-radio-button value="false">{{'reprint-component.No' |translate}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="col-md-3">
+              <div class="text-right d-flex">
+                <button type="submit" [disabled]="f.invalid" (click)="applyFilter()" class="button btn-width">
+                  {{'reprint-component.Apply-Filter' | translate}}
+                </button>
+                <button type="button" (click)="clearFilter()" class="button btn-width">
+                  {{'reprint-component.Clear' | translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="reprint-table">
+          <table mat-table table [dataSource]="documentList" multiTemplateDataRows class="mat-elevation-z8" width="100">
+            <ng-container matColumnDef="Controlled_Print">
+              <th mat-header-cell *matHeaderCellDef>
+                {{((printType === commonConstant.PrintTypes.IP) ? 'reprint-component.Issued-Print-Number' :
+                'reprint-component.Controlled-Print-Number') | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.Controlled_Print}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Print_Owner">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Owner' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element["#userId"].name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Recipient">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Recipient' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element["#recipient"].name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Reason">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Reason' | translate}}</th>
+              <td mat-cell matTooltip="{{element['#printReason']}}" [matTooltipPosition]="'above'" class="ellipsis"
+                *matCellDef="let element"> {{element["#printReason"]}} </td>
+            </ng-container>
+            <ng-container matColumnDef="profile">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Profile' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element["#profile"]}} </td>
+            </ng-container>
+            <ng-container matColumnDef="userInput">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.User-Input' | translate}}</th>
+              <td mat-cell matTooltip="{{element['userInput']}}" [matTooltipPosition]="'above'" class="ellipsis"
+                *matCellDef="let element"> {{element["userInput"]}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Print_Date">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Date' | translate}}</th>
+              <td mat-cell *matCellDef="let element">
+                {{element["#printRequestDateTime"] | date:'d/M/yyyy, h:mm:ss a'}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Print_Status">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Print-Status' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element["#printStatus"]}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Reprint_Count">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Reprint-Count' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.rePrintInfo ? element.rePrintInfo.length : '-'
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Recall">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="d-flex">
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox> {{'reprint-component.Recall' | translate}}
+                </div>
+
+              </th>
+              <td mat-cell *matCellDef="let doc;" style="cursor:pointer">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(doc) : null"
+                  [checked]="selection.isSelected(doc)"
+                  [disabled]="(doc.recallInfo && doc.recallInfo.recallStatus) || doc['#printStatus'] !== 'Successful'">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Reconciliation">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="d-flex">
+                  {{'reprint-component.Reconciliation' | translate}}
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let doc;" style="cursor:pointer">
+                <mat-checkbox (click)="setReconciliationDisabled(doc) && $event.stopPropagation()"
+                  (change)="$event ? selection.toggle(doc) : null" [checked]="selection.isSelected(doc)"
+                  [disabled]="(doc.reconciliationInfo && (doc.reconciliationInfo.outcome && doc.reconciliationInfo.outcome === 'Complete')) || doc['#printStatus'] !== 'Successful'">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Actions">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="d-flex">
+                  <span>{{'reprint-component.Re-Print' | translate}}</span>
+                </div>
+              </th>
+              <td mat-cell *matCellDef="let doc;" style="cursor:pointer">
+                <button *ngIf="printType == 'CP'"
+                  [disabled]="(doc.recallInfo && doc.recallInfo.recallStatus) || doc['#printStatus'] !== 'Successful'"
+                  type="button" class="button print-btn" (click)="rePrint(doc)">{{'reprint-component.Reprint' |
+                  translate}}</button>
+                <button *ngIf="printType == 'IP'"
+                  [disabled]="(doc.reconciliationInfo && doc.reconciliationInfo.outcome) || doc['#printStatus'] !== 'Successful'"
+                  type="button" class="button print-btn" (click)="rePrint(doc)">{{'reprint-component.Reprint' |
+                  translate}}</button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Recall_Status">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Recall-Status' | translate}}</th>
+              <td mat-cell *matCellDef="let doc">{{doc.recallInfo ?
+                doc.recallInfo.recallStatus?doc.recallInfo.recallStatus : 'N/A' : 'N/A' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Recall_Initiation_Date">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Recall-Initiation-Date' | translate}}</th>
+              <td mat-cell *matCellDef="let doc"> {{doc.recallInfo?doc.recallInfo.recallStatus?
+                ( doc.recallInfo.recallInitiationDate | date:'d/M/yyyy') : 'N/A' : 'N/A' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Recall_Completion_Date">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Recall-Completion-Date' | translate}}</th>
+              <td mat-cell *matCellDef="let doc">{{doc.recallInfo? doc.recallInfo.recallStatus?
+                (doc.recallInfo.recallCompletionDate | date:'d/M/yyyy') : 'N/A' : 'N/A'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Reconciliation_Due_Date">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Reconciliation-Due-Date' | translate}}</th>
+              <td mat-cell *matCellDef="let doc"
+                [ngClass]="{'updateLink':!((doc.reconciliationInfo && doc.reconciliationInfo.outcome) || doc['#printStatus'] !== 'Successful')}">
+                <span (click)="openUpdateOverdue(doc)">{{doc['#dueDate'] ?
+                  (doc['#dueDate'] | date:'d/M/yyyy') : 'N/A' }}
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Reconciliation_Status">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Reconciliation-Status' | translate}}</th>
+              <td mat-cell *matCellDef="let doc">
+                {{doc.reconciliationInfo?doc.reconciliationInfo.outcome?
+                doc.reconciliationInfo.outcome : 'N/A' : 'N/A' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Reconciliation_Overdue">
+              <th mat-header-cell *matHeaderCellDef>{{'reprint-component.Reconciliation-Overdue' | translate}}</th>
+              <td mat-cell *matCellDef="let doc">{{doc.isOverdue ? 'Yes' :
+                'No' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <div class="example-element-detail"
+                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <table mat-table [dataSource]="element.rePrintInfo" class="mat-elevation-z8" width="80%">
+                    <ng-container matColumnDef="Controlled_Print">
+                      <th mat-header-cell width="15%" *matHeaderCellDef>
+                        {{((printType === commonConstant.PrintTypes.IP) ? 'reprint-component.Issued-Reprint-Number' :
+                        'reprint-component.Controlled-Reprint-Number') | translate }}</th>
+                      <td mat-cell width="15%" *matCellDef="let item"> {{item["#printCopyNo"]}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Print_Owner">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-Owner' |
+                        translate}}</th>
+                      <td mat-cell width="10%" *matCellDef="let item"> {{element["#userId"].name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Recipient">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-Recipient' |
+                        translate}}</th>
+                      <td mat-cell width="10%" *matCellDef="let item"> {{element["#recipient"].name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ReprintReason">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-Reason' |
+                        translate}}</th>
+                      <td mat-cell matTooltip="{{item['#printReason']}}" [matTooltipPosition]="'above'" class="ellipsis"
+                        width="10%" *matCellDef="let item"> {{item["#printReason"]}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="userInput">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-User-Input' |
+                        translate}}</th>
+                      <td mat-cell matTooltip="{{item['userInput']}}" [matTooltipPosition]="'above'" class="ellipsis"
+                        width="10%" *matCellDef="let item"> {{item["userInput"]}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ReprintProfile">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-Profile' |
+                        translate}}</th>
+                      <td mat-cell width="10%" *matCellDef="let item"> {{element["#profile"]}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Print_pages">
+                      <th mat-header-cell width="15%" *matHeaderCellDef>{{'reprint-component.Reprint-Page' | translate}}
+                      </th>
+                      <td mat-cell width="15%" *matCellDef="let item">
+                        {{item["#pages"] ? (item["#pages"]) : '-'}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Print_Date">
+                      <th mat-header-cell width="15%" *matHeaderCellDef>{{'reprint-component.Reprint-Date' | translate}}
+                      </th>
+                      <td mat-cell width="15%" *matCellDef="let item">
+                        {{item["#printedDateTime"] | date:'d/M/yyyy, h:mm:ss a'}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Print_Status">
+                      <th mat-header-cell width="10%" *matHeaderCellDef>{{'reprint-component.Reprint-Status' |
+                        translate}}</th>
+                      <td mat-cell width="10%" *matCellDef="let item"> {{item && item["#printStatus"] ?
+                        item["#printStatus"] :
+                        ''}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsReprint"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsReprint;"></tr>
+                  </table>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element" [ngClass]="{'overdue':element.isOverdue}"
+              (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+          </table>
+        </div>
+        <mat-paginator (page)="handlePageEvent($event)" [length]="paginatorKeys.count"
+          [pageSize]="paginatorKeys.pageSize" [pageIndex]="paginatorKeys.pageIndex">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade-bg" *ngIf="showPopup">
+    <div class="modal-dialog"
+      [ngClass]="{'maxSizeModel':printType === 'IP', 'modal-dialog-scrollable': printType === 'IP'}" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" *ngIf="printType === 'CP'">
+            {{'reprint-component.Recall-Documents' | translate}}</h5>
+          <h5 class="modal-title" id="exampleModalLabel" *ngIf="printType === 'IP'">
+            {{'reprint-component.Reconciliation-Document' | translate}}</h5>
+          <button type="button" class="close" (click)="closePopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <mat-form-field class="example-full-width" *ngIf="printType === 'CP'">
+              <mat-label>{{'reprint-component.Recall-Reason' | translate}}</mat-label>
+              <input type="text" matInput name="recallReasonName" [(ngModel)]="recallReason"
+                [matAutocomplete]="controlAutoReason" (ngModelChange)="doFilter()" />
+              <mat-autocomplete #controlAutoReason="matAutocomplete">
+                <mat-option *ngFor="let reason of recallReasons | async" [value]="reason.label">
+                  {{ reason.label }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div *ngIf="printType === 'IP'">
+              <form #reForm="ngForm" (submit)="reForm.valid && sendReconciliationReq()">
+                <table mat-table [dataSource]="reconciliationDocs" class="mat-elevation-z8">
+                  <ng-container matColumnDef="Controlled_Print">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Issued-Print-Number' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element["#printCopyNo"]}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="pages_to_print">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Pages-Printed'| translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type ==='Print' ? '1 - '+ element["#pageCount"] :
+                      element["#pages"]}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="pages_returned">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Pages-Returned' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i=index">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>{{'reprint-component.Pages-Returned'| translate}}</mat-label>
+                        <input matInput name="page_Count{{i}}" pattern="^[0-9-,]+$" #pageToPrint="ngModel"
+                          [(ngModel)]="element.reconciliationInfo.printReturned" (blur)="setOutcome(i)" required />
+                      </mat-form-field>
+                      <div style="font-size: 13px; font-style: italic;">
+                        {{'reprint-component.Pages-Available' | translate}}:{{element["#pageCount"] ?
+                        element["#pageCount"] : element["#pagesToPrint"].length }} <a href="javascript:void(0)"
+                          (click)="showNoteToggle()" style="color:blue; cursor: pointer;">?</a>
+                        <div class="col-md-12" *ngIf="showNote"
+                          style="font-size: 13px; font-style: italic;color: indianred;padding-left: 0px; padding-right: 0px">
+                          {{'reprint-component.Note'| translate}}
+                        </div>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="outcome">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Outcome' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i= index">
+                      {{element.reconciliationInfo.outcome? element.reconciliationInfo.outcome : '--'}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="outcomeStatus">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Outcome-Status' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i= index">
+                      <mat-form-field appearance="fill">
+                        {{'reprint-component.Outcome-Status' | translate}}
+                        <mat-label></mat-label>
+                        <mat-select name="outcomeStatus{{i}}" [(ngModel)]="element.reconciliationInfo.outcomeStatus"
+                          [required]="element.reconciliationInfo.outcome && element.reconciliationInfo.outcome == 'Incomplete Recovery'">
+                          <mat-option [value]="null">
+                            {{'reprint-component.Outcome-Status' | translate}}
+                          </mat-option>
+                          <mat-option *ngFor="let outStat of outcomeStatusList" [value]="outStat.value">
+                            {{outStat.label}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'notification-components.Comments' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i=index">
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>{{'reprint-component.Comment' | translate}}</mat-label>
+                        <textarea
+                          [required]="element.reconciliationInfo.outcome && element.reconciliationInfo.outcome == 'Incomplete Recovery'"
+                          matInput (cdkTextareaAutosize)="true" name="comment_{{i}}" #comment="ngModel"
+                          [(ngModel)]="element.reconciliationInfo.comment"></textarea>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Deviation_No">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'reprint-component.Deviation-Number' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i= index">
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> {{'reprint-component.Deviation-Number' | translate}}</mat-label>
+                        <input matInput name="Deviation_No{{i}}"
+                          [(ngModel)]="element.reconciliationInfo.deviationNumber">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="reconcileDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: reconcileDisplayedColumns;"></tr>
+                </table>
+                <div class="modal-footer">
+                  <div class="text-center">
+                    <button *ngIf="printType === 'IP'" [disabled]="reForm.invalid" type="submit"
+                      class="button">{{'notification-components.Continue' |
+                      translate}}</button>
+                    <button type="button" (click)="closePopup()" class="button">{{'notification-components.Cancel' |
+                      translate}}</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" *ngIf="printType === 'CP'">
+          <div class="text-center">
+            <button *ngIf="printType === 'CP'" type="button" class="button" [disabled]="!recallReason.length"
+              (click)="sendRecallDocReq();">{{'notification-components.Continue' | translate}}</button>
+            <button type="button" (click)="closePopup()" class="button">{{'notification-components.Cancel' |
+              translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade-bg" *ngIf="updateDueDate">
+    <div class="modal-dialog model-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{'reprint-component.Update-Duedate' | translate}}</h5>
+          <button type="button" class="close" (click)="closeUpdateDueDate()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #reForm="ngForm" (submit)="reForm.valid && updateDueDateFun()">
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.Old-Due-Date' | translate}}</mat-label>
+                <input [(ngModel)]="document.dueDate" name="dueDatePickerName" matInput [matDatepicker]="dueDatePicker"
+                  placeholder="{{'reprint-component.Old-Due-Date' | translate}}" disabled>
+                <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #dueDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.New-Due-Date' | translate}}</mat-label>
+                <input [(ngModel)]="newDueDate" name="newDueDatePickerName" matInput required [min]="todayDate"
+                  [matDatepicker]="newDueDatePicker" placeholder="{{'reprint-component.New-Due-Date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="newDueDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #newDueDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>{{'reprint-component.Reason' | translate}}</mat-label>
+                <input matInput [matAutocomplete]="overDueReasonAuto" name="overDueReason" [(ngModel)]="overDueReason"
+                  required (ngModelChange)="filterReconciliationReasons()" />
+                <mat-autocomplete #overDueReasonAuto="matAutocomplete">
+                  <mat-option *ngFor="let item of reconciliationReasons | async" [value]="item.value">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <div class="modal-footer">
+                <div class="text-center">
+                  <button type="submit" class="button">{{'notification-components.Continue' | translate}}</button>
+                  <button type="button" (click)="closeUpdateDueDate()" class="button">{{'notification-components.Cancel'
+                    | translate}}</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

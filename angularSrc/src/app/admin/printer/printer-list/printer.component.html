@@ -1,0 +1,29 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'printer-component.Loading' | translate}}</div>
+</div>
+
+<form class="printer-popup" (ngSubmit)="updatePrinter()" #form="ngForm">
+    <div class="d-flex">
+        <div>
+            <h3 *ngIf="!isUpdate">{{'printer-component.Add-New-Printer' | translate}}</h3>
+            <h3 *ngIf="isUpdate">{{'printer-component.Update-Printer' | translate}}</h3>
+        </div>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="box-wrapper">
+            <mat-form-field class="printer-form-popup">
+                <mat-label>{{'printer-component.Printer-Name' | translate}}</mat-label>
+                <input matInput maxlength="70" type="text" required [(ngModel)]="printer.name" name="printerName"
+                    #printerName="ngModel" placeholder="{{'printer-component.Printer-Name' | translate}}" />
+                <mat-error *ngIf="error.name">
+                    {{'printer-component.Printer-Name-is-required' | translate}}
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-button mat-dialog-close class="button mr-2">{{'printer-component.Cancel' | translate}}</button>
+        <button mat-button [type]="'submit'" [disabled]="form.invalid" cdkFocusInitial class="button">{{'printer-component.Save' |
+            translate}}</button>
+    </mat-dialog-actions>
+</form>

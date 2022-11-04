@@ -1,0 +1,108 @@
+@import "../../color-variable.scss";
+
+.audit {
+  table {
+    width: 100%;
+  }
+
+  tr.example-detail-row {
+    height: 0;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+
+  .example-element-description {
+    padding: 16px;
+  }
+
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+
+  .btn-pos {
+    position: relative;
+    top: 3.3rem;
+
+    .btn-width {
+      width: 7rem;
+      margin-left: 15px;
+    }
+  }
+
+  .title-border {
+    border-bottom: 0.5px solid lightgrey;
+    padding: 2px;
+    margin-bottom: 20px;
+  }
+
+  .ellipsis {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .fa-icon {
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  .print-table-a {
+    table {
+      width: 111%;
+    }
+
+    overflow-x: scroll;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      width: 0.2em;
+      height: 0.5em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $orange-color;
+      border-radius: 3px;
+
+      &:hover {
+        background: rgb(255, 153, 0);
+      }
+    }
+
+  }
+
+  .print-table-b {
+    width: 100%;
+  }
+
+}

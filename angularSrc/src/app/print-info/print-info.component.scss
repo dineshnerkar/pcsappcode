@@ -1,0 +1,43 @@
+.example-chip-list{
+    width: 100%;
+}
+.example-full-width{
+    width: 100%;
+}
+.fade-bg {
+    display: block;
+    background: #00000050;
+}
+.recipient-box {
+    background-color: #d3d3d366;
+    padding: 0.2rem 1rem;
+    position: relative;
+    height: 1.8rem;
+    font-size: 0.8125rem;
+    width: 14rem;
+    margin-bottom: 5px;
+    span {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 300;
+    }
+    .close-icon {
+        position: absolute;
+        top: 0.125rem;
+        right: 0.125rem;
+        cursor: pointer;
+        .cancel-icon {
+            background-size: 0.4375rem;
+        }
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

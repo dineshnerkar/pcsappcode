@@ -1,0 +1,231 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'reprint-component.Loading' | translate}}</div>
+</div>
+<div class="main-container admin-profile">
+    <div class="container-fluid">
+        <div class="box-wrapper">
+            <form name="profileForm" #profileForm="ngForm" novalidate>
+                <div class="d-flex">
+                    <div class="col-md-9" *ngIf="!isUpdate">
+                        <h3>{{'profile-component.Add-New-Profile' | translate}}</h3>
+                    </div>
+                    <div class="col-md-9" *ngIf="isUpdate">
+                        <h3>{{'profile-component.Update-Profile' | translate}}</h3>
+                    </div>
+                </div>
+                <div class="gray-separator"></div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <mat-form-field class="full-width">
+                            <mat-label>{{'profile-component.Profile-Name' | translate}}</mat-label>
+                            <input matInput name="profileName" [(ngModel)]="profile.name" required
+                                #profileName="ngModel" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field class="full-width">
+                            <mat-label>{{'profile-component.Applicable-For' | translate}}</mat-label>
+                            <mat-select name="applicableFor" [(ngModel)]="profile.applicableFor" required
+                                #applicableFor="ngModel">
+                                <mat-option [value]="'CP'">{{'profile-component.CP' | translate}}</mat-option>
+                                <mat-option [value]="'IP'">{{'profile-component.IP' | translate}}</mat-option>
+                                <mat-option [value]="'Both'">{{'profile-component.Both' | translate}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field class="full-width">
+                            <mat-label>{{'profile-component.Used-In' | translate}}</mat-label>
+                            <mat-select name="usedIn" [(ngModel)]="profile.usedIn" required #usedIn="ngModel">
+                                <mat-option [value]="'Print'">{{'profile-component.Print' | translate}}</mat-option>
+                                <mat-option [value]="'Reprint'">{{'profile-component.Reprint' | translate}}</mat-option>
+                                <mat-option [value]="'Both'">{{'profile-component.Both' | translate}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-checkbox name="batchNumber" #batchNumber="ngModel"
+                            [(ngModel)]="profile.isBatchNumberApplicable">
+                            {{'profile-component.Batch-ID-Applicable' | translate}}</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-right">
+                            <button mat-button type="button" [disabled]="!isAllTemplateSaved"
+                                (click)="openProfileTemplateDialog()" class="button mr-2">
+                                {{'profile-component.Add-Template-From-Existing' | translate}}
+                            </button>
+                            <button type="button" class="button" [disabled]="!isAllTemplateSaved"
+                                (click)="addNewTemplate()">
+                                {{'profile-component.Add-New-Template' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <mat-accordion>
+                        <ng-container
+                            *ngFor="let template of profile.templates; let index = index; last as isLast first as isFirst"
+                            class="row full-width">
+                            <mat-expansion-panel [expanded]="isLast">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="col-md-8">
+                                        {{template.name ? template.name : ('profile-component.templateName' |
+                                        translate)}}
+                                    </mat-panel-title>
+                                    <mat-panel-description class="col-md-4">
+                                        <mat-icon *ngIf="!isLast" (click)="moveDown($event, index)">keyboard_arrow_down
+                                        </mat-icon>
+                                        <mat-icon *ngIf="!isFirst" (click)="moveUp($event, index)">keyboard_arrow_up
+                                        </mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <div class="row col-md-12">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="fill" class="full-width">
+                                            <mat-label>{{'profile-component.Template-Name' | translate}}</mat-label>
+                                            <input matInput [(ngModel)]="template.name" name="templateName{{index}}"
+                                                required type="text" maxlength="100" #templateName="ngModel">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="button" (click)="openFile(index)">
+                                            {{'profile-component.Add-File' | translate}}
+                                        </button>
+                                        <input type="file" id="fileId{{index}}" name="fileId{{index}}"
+                                            (change)="selectFile($event.target.files, index)" accept=".pdf"
+                                            style="display: none;" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{'profile-component.File-URL' | translate}} : {{template.url}}
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <button type="button" class="button" (click)="saveTemplate(index)">
+                                            {{'profile-component.saveTemplate' | translate}}
+                                        </button>
+                                        <button type="button" class="button" (click)="deleteTemplate(index)">
+                                            {{ 'profile-component.resetTemplate' | translate}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </ng-container>
+                    </mat-accordion>
+                </div>
+                <div class="gray-separator"></div>
+                <div class="row">
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2">
+                        <button mat-icon-button class="button" aria-label="add icon" matTooltip="{{'profile-component.createNewUserInput' | translate}}"
+                            (click)="addNewUserInput()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="print-table" *ngIf="profile.userInputFields">
+                    <table mat-table [dataSource]="profile.userInputFields" #MatTable class="mat-elevation-z8"
+                        multiTemplateDataRows>
+                        <ng-container matColumnDef="key">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-component.key' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.key}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-component.User-Input-Label' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element; let nIndex = dataIndex">
+                                <mat-form-field class="full-width">
+                                    <mat-label>{{'profile-component.User-Input-Label' | translate}}</mat-label>
+                                    <input matInput [(ngModel)]="element.name" name="inputName_{{nIndex}}" [required]="element.show"
+                                        #inputName="ngModel">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-component.User-Input-Type'|
+                                translate}}</th>
+                            <td mat-cell *matCellDef="let element; let fIndex = dataIndex">
+                                <mat-form-field>
+                                    <mat-label>{{'profile-component.User-Input-Type' | translate}}</mat-label>
+                                    <mat-select [(ngModel)]="element.type" [required]="element.show" name="filedType{{fIndex}}"
+                                        #filedType="ngModel">
+                                        <mat-option [value]="'Text'">{{'profile-component.Input-Box' | translate}}
+                                        </mat-option>
+                                        <mat-option [value]="'Dropdown'">
+                                            {{'profile-component.Select-Box' | translate}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="validation">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-component.User-Input-Validation' |
+                                translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element;let vIndex = dataIndex">
+                                <mat-form-field>
+                                    <mat-label>{{'profile-component.User-Input-Validation' | translate}}</mat-label>
+                                    <mat-select name="validation{{vIndex}}" [(ngModel)]="element.validation" [required]="element.show"
+                                        #validation="ngModel">
+                                        <mat-option [value]="'Required'">{{'profile-component.Required' | translate}}
+                                        </mat-option>
+                                        <mat-option [value]="'NotRequired'">{{'profile-component.Not-Required' |
+                                            translate}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="selectOptions">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-component.Dropdown-Option' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element;let dIndex = dataIndex">
+                                <mat-form-field class="full-width" *ngIf="element.type === 'Dropdown'">
+                                    <mat-label>{{'profile-component.Dropdown-Option' | translate}}</mat-label>
+                                    <mat-chip-list #dropDown aria-label="Dropdown Option">
+                                        <mat-chip *ngFor="let option of element.selectOptions"
+                                            (removed)="removeSelectOptions(element, option)">
+                                            {{option.label}}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip>
+                                        <input placeholder="{{'profile-component.Dropdown-Option' | translate}}"
+                                            [formControl]="fruitCtrl" #fruitInput [matChipInputFor]="dropDown"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            name="dropdownList{{dIndex}}"
+                                            (matChipInputTokenEnd)="addSelectOptions($event, element)">
+                                    </mat-chip-list>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>{{'profile-list-component.Actions' | translate}}</th>
+                            <td mat-cell *matCellDef="let element; let ddIdex= dataIndex">
+                                <button *ngIf="!element.key" mat-icon-button class="button" aria-label="delete icon"
+                                    (click)="deleteUserInputFields(ddIdex)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row [hidden]="!row.show" *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <div class="gray-separator"></div>
+                <div class="text-right">
+                    <button mat-icon-button type="button" matTooltip="{{'admin.Cancel' | translate}}"
+                        class="button mr-2" (click)="gotoDashboard()">
+                        {{'admin.Cancel' | translate}}
+                    </button>
+                    <button type="button" (click)="saveProfile()" [disabled]="profileForm.invalid" class="button">
+                        {{'profile-component.Save-Profile' | translate}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

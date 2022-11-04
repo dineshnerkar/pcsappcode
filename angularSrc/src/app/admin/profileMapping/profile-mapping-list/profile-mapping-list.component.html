@@ -1,0 +1,99 @@
+<div *ngIf="loading" class="loader-wrapper">
+  <div class="loader">{{'printer-list-component.Loading' | translate}}</div>
+</div>
+<div class="main-container mapping-list">
+  <div class="container-fluid">
+    <div class="box-wrapper">
+      <div class="d-flex">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>{{'profile-mapping-list-component.Profile-Mapping-List' | translate}}</h3>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <button mat-icon-button type="button" class="button" aria-label="add icon" matTooltip="{{'profile-mapping-list-component.Add-Mapping' | translate}}"
+                (click)="openProfileMappingDialog()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+          </div>
+          <div class="title-border"></div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field class="full-width">
+              <mat-label>{{'profile-mapping-list-component.Profile-Name' | translate}}
+              </mat-label>
+              <input type="text" maxlength="70" matInput [matAutocomplete]="auto"
+                [(ngModel)]="profileDocumentFilter.profileName" (ngModelChange)="filterProfileName()">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of profileOptions | async" [value]="option.name">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="full-width">
+              <mat-label>{{'profile-mapping-list-component.Document-Type' | translate}}
+              </mat-label>
+              <input type="text" maxlength="70" matInput [matAutocomplete]="docAuto"
+                [(ngModel)]="profileDocumentFilter.documentName" (ngModelChange)="filterDocumentName()">
+              <mat-autocomplete #docAuto="matAutocomplete">
+                <mat-option *ngFor="let option of documentFilterList | async" [value]="option.name">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <button mat-icon-button type="button" class="button mr-2" matTooltip="{{'profile-mapping-list-component.Apply-Filter' | translate}}" (click)="getProfileDocumentList()">
+              {{'profile-mapping-list-component.Apply-Filter' | translate}}
+            </button>
+            <button mat-icon-button type="button" class="button" matTooltip=" {{'profile-mapping-list-component.Clear-Filter' | translate}}" (click)="clearFilter()">
+              {{'profile-mapping-list-component.Clear' | translate}}
+            </button>
+
+          </div>
+        </div>
+      </div>
+      <div class="print-table">
+        <table mat-table table [dataSource]="profileDocumentList" multiTemplateDataRows class="mat-elevation-z8">
+          <ng-container matColumnDef="profileName">
+            <th mat-header-cell *matHeaderCellDef>{{'profile-mapping-list-component.Profile-Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.profileName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="documentNames">
+            <th mat-header-cell *matHeaderCellDef>{{'profile-mapping-list-component.Document-Type' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ul>
+                <li *ngFor="let doc of element.documents">{{doc.name}}</li>
+              </ul>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{'profile-mapping-list-component.Actions' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button type="button" class="button mr-2" aria-label="edit icon"
+                (click)="openProfileMappingDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" class="button" aria-label="delete icon"
+                (click)="deleteProfileMapping(element)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row">
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

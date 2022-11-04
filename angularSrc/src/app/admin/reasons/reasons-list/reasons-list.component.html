@@ -1,0 +1,86 @@
+<div *ngIf="loading" class="loader-wrapper">
+  <div class="loader">{{'reasons-list-component.Loading' | translate}}</div>
+</div>
+<div class="main-container reasons-list">
+  <div class="container-fluid">
+    <div class="box-wrapper">
+      <div class="d-flex">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>{{'reasons-list-component.Reasons-List' | translate}}</h3>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <button mat-icon-button type="button" class="button" aria-label="Add icon"
+                matTooltip="{{'reasons-list-component.Create-New-Reason' | translate}}" (click)="updateReasonDialog()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+          </div>
+          <div class="title-border"></div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-md-4">
+            <mat-checkbox matInput name="print" [(ngModel)]="applicableFor.print">
+              {{'reasons-list-component.Print' | translate}}
+            </mat-checkbox>
+            <mat-checkbox matInput name="reprint" [(ngModel)]="applicableFor.reprint">
+              {{'reasons-list-component.Reprint' | translate}}
+            </mat-checkbox>
+            <mat-checkbox matInput name="recall" [(ngModel)]="applicableFor.recall">
+              {{'reasons-list-component.Recall' | translate}}
+            </mat-checkbox>
+            <mat-checkbox matInput name="reconcile" [(ngModel)]="applicableFor.reconcile">
+              {{'reasons-list-component.Reconcile' | translate}}
+            </mat-checkbox>
+          </div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <button mat-icon-button type="button" class="button mr-2"
+              matTooltip="{{'reasons-list-component.Apply-Filter' | translate}}" (click)="getReasonList()">
+              {{'reasons-list-component.Apply-Filter' | translate}}
+            </button>
+            <button mat-icon-button type="button" class="button" matTooltip="{{'reasons-list-component.Clear' | translate}}" (click)="clearFilter()">
+              {{'reasons-list-component.Clear' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="print-table">
+        <table mat-table table [dataSource]="reasonList" multiTemplateDataRows class="mat-elevation-z8">
+          <ng-container matColumnDef="reasonText">
+            <th mat-header-cell *matHeaderCellDef>{{'reasons-list-component.Reason-Name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reasons">
+            <th mat-header-cell *matHeaderCellDef>{{'reasons-list-component.Available-For' | translate}}</th>
+            <td mat-cell *matCellDef="let element;"> {{element.print ? 'Print,':''}} {{element.reprint ? 'Reprint,':''}}
+              {{element.recall ? 'Recall,':''}} {{element.reconcile ? 'Reconcile,':''}}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{'reasons-list-component.Actions' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button type="button" class="button" aria-label="edit icon"
+                (click)="updateReasonDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" class="button" aria-label="delete icon"
+                (click)="deleteReason(element)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row">
+          </tr>
+        </table>
+        <div class="no-record" *ngIf="reasonList.length === 0">{{'reasons-list-component.No-records-found' | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

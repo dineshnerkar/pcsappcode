@@ -1,0 +1,545 @@
+/* You can add global styles to this file, and also import other style files */
+
+@charset "utf-8";
+@import "./color-variable.scss";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+
+body {
+  font-family: "Poppins", sans-serif !important;
+  background-color: $disable-color;
+  height: 100vh;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.overflow-inherit {
+  overflow: inherit !important;
+}
+
+.white-sapce-inherit {
+  white-space: inherit !important;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.error-text {
+  font-size: 0.625rem;
+  color: $red-color;
+  margin-top: 0.125rem;
+}
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000000b3;
+  display: flex;
+  align-items: center;
+  z-index: 99988 !important;
+}
+.loader {
+  border: none;
+  color: #ff9e1f;
+  font-size: 20px;
+  margin: 70px auto;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-animation: load4 1.3s infinite linear;
+  animation: load4 1.3s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@-webkit-keyframes load4 {
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em,
+      -3em 0 0 -1em, -2em -2em 0 0;
+  }
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+  25% {
+    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em,
+      -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0,
+      -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0,
+      -2em -2em 0 -1em;
+  }
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0,
+      -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0,
+      -2em -2em 0 0.2em;
+  }
+}
+@keyframes load4 {
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em,
+      -3em 0 0 -1em, -2em -2em 0 0;
+  }
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+  25% {
+    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em,
+      -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0,
+      -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0,
+      -2em -2em 0 -1em;
+  }
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0,
+      -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0,
+      -2em -2em 0 0.2em;
+  }
+}
+// icons
+
+.down-icon {
+  background-image: url("./assets/images/arrow-down-sign-to-navigate.png");
+  background-repeat: no-repeat;
+  padding: 0.625rem;
+  display: block;
+  background-position: center;
+  background-size: 0.625rem;
+  cursor: pointer;
+}
+
+.button {
+  font-size: 0.75rem;
+  color: $black-color;
+  padding: 0.5rem 1.25rem;
+  border-radius: 5rem;
+  border: 0.0625rem solid $white-color;
+  background-color: $orange-color;
+  font-weight: 500;
+  display: inline-block;
+  cursor: pointer;
+  
+
+
+  &:focus {
+    outline: none;
+  }
+
+  &.disabled {
+    color: $black-color;
+    background-color: $disable-color;
+    border-color: $disable-color;
+  }
+
+  &:disabled {
+    color: $black-color;
+    background-color: $disable-color;
+    border-color: $disable-color;
+  }
+}
+.mat-icon{
+  vertical-align: middle;
+}
+.button-primary {
+  background-color: $black-color;
+  color: $white-color;
+}
+
+.gray-separator {
+  display: block;
+  width: 100%;
+  height: 0.0625rem;
+  border-bottom: 0.0625rem solid $border-color;
+  margin-bottom: 0.625rem;
+  margin-top: 0.625rem;
+}
+
+.form-group {
+  .form-control {
+    border: 0.0625rem solid $gray-color;
+    background-color: $white-color;
+    width: 100%;
+    box-shadow: none;
+    outline: none;
+    font-size: 0.75rem;
+    padding: 0.625rem;
+    color: $black-color;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    -webkit-box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.16);
+    height: auto;
+
+    &::placeholder {
+      font-size: 0.625rem;
+      color: $gray-color;
+      font-weight: 400;
+    }
+
+    &.disabled {
+      color: $black-color;
+      background-color: $disable-color;
+      border-color: $disable-color;
+    }
+
+    &:disabled {
+      color: $black-color;
+      background-color: $disable-color;
+      border-color: $disable-color;
+    }
+
+    &:hover {
+      border-color: $gray-color !important;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .label {
+    font-size: 0.75rem;
+    color: $black-color;
+    margin-bottom: 0.3125rem !important;
+    font-weight: 500;
+
+    .small-text {
+      font-size: 0.5625rem;
+    }
+  }
+}
+
+.label {
+  font-size: 0.75rem;
+  color: $black-color;
+  margin-bottom: 0.3125rem !important;
+  font-weight: 500;
+
+  .small-text {
+    font-size: 0.5625rem;
+  }
+}
+
+.main-container {
+  background-color: $disable-color;
+  width: 100%;
+  padding-top: 6.9375rem;
+  padding-bottom: 3.75rem;
+
+  .required {
+    position: relative;
+
+    &::after {
+      content: "*";
+      position: absolute;
+      left: -0.3125rem;
+      top: 0;
+      color: red;
+      z-index: 1;
+      font-size: 0.6rem;
+    }
+  }
+
+  .box-wrapper {
+    padding: 1.25rem;
+    border: 0.0625rem solid $border-color;
+    -webkit-box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+    background-color: $white-color;
+    border-radius: 0.1875rem;
+    position: relative;
+    max-width: 99vw;
+    min-width: 60vw;
+    //  overflow: scroll;
+    z-index: 0;
+  }
+
+  .title {
+    font-size: 1.125rem;
+    color: $black-color;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+  .custom-dropdown {
+    .dropdown-control {
+      padding: 10px 20px;
+      border: 1px solid $black-color;
+      font-size: 12px;
+
+      &:focus {
+        outline: none;
+        pointer-events: none;
+
+        .menu-dropdown {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+
+    .menu-dropdown {
+      background-color: $disable-color;
+      box-shadow: 0 0.0625rem 0.1875rem 0 rgba(0, 0, 0, 0.25);
+      border-radius: 0.125rem;
+      padding: 0.625rem 0.3125rem;
+      margin-top: 0.625rem;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 5;
+      overflow-y: auto;
+
+      &::before {
+        content: "";
+        position: absolute;
+        right: 0.625rem;
+        top: -0.625rem;
+        width: 0;
+        height: 0;
+        border-right: 0.5rem solid transparent;
+        border-left: 0.5rem solid transparent;
+        border-bottom: 0.625rem solid $disable-color;
+      }
+
+      li {
+        border-bottom: 0.0625rem solid $gray-color;
+
+        .dropdown-item {
+          color: $black-color;
+          font-size: 0.75rem;
+          font-weight: 600;
+          cursor: pointer;
+          pointer-events: painted;
+        }
+      }
+    }
+  }
+
+  .custom-select-dropdown {
+    position: relative;
+    margin-bottom: 1rem;
+
+    .label {
+      font-size: 0.75rem;
+      color: $black-color;
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      appearance: none;
+      outline: 0;
+      background-image: none;
+      background-color: $white-color;
+      border: 1px solid $black-color;
+      border-radius: 0.25rem;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 7px 10px;
+      color: $black-color;
+      background-image: url("./assets/images/arrow-down-sign-to-navigate.png");
+      background-repeat: no-repeat;
+      padding: 0.625rem;
+      display: block;
+      background-position: 95% 50%;
+      background-size: 0.625rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    select::-ms-expand {
+      display: none;
+    }
+  }
+
+  .print-img {
+    border: 0.0625rem solid $border-color;
+    background-color: $white-color;
+    border-radius: 0.25rem;
+    position: relative;
+
+    .print-header {
+      border-bottom: 0.0625rem solid $border-color;
+      background-color: $disable-color;
+
+      .header-title {
+        font-size: 0.75rem;
+        color: $black-color;
+        padding: 0.75rem 0.625rem;
+        margin: 0;
+      }
+    }
+
+    .print-body {
+      padding: 0.625rem;
+
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    .print-footer {
+      border-top: 0.0625rem solid $border-color;
+      background-color: $disable-color;
+
+      .footer-title {
+        font-size: 0.75rem;
+        color: $black-color;
+        padding: 0.75rem 0.625rem;
+        margin: 0;
+      }
+    }
+  }
+}
+.toggle-btn {
+  .mat-button-toggle-group {
+    border-radius: 50px;
+    background-color: $toggle-bg-color;
+    .mat-button-toggle {
+      background-color: transparent;
+      border: 0;
+      border-radius: 50px;
+      .mat-button-toggle-button {
+        .mat-button-toggle-label-content {
+          line-height: inherit;
+          padding: 5px 1rem;
+          font-size: 12px;
+        }
+        &:focus {
+          outline: none;
+        }
+      }
+      &.mat-button-toggle-checked {
+        background-color: $white-color;
+        color: $black-color;
+        -webkit-box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+        box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+      }
+      &:hover {
+        background-color: $white-color;
+        color: $black-color;
+        -webkit-box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+        box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.16);
+      }
+    }
+  }
+}
+.print-table {
+  .mat-table {
+    overflow: auto;
+    max-height: 24rem;
+    .mat-header-row {
+      background-color: $orange-color;
+      border-bottom: 2px solid $black-color;
+      .mat-header-cell {
+        color: $black-color;
+        padding: 10px;
+        font-weight: 400;
+        font-size: 12px;
+      }
+    }
+    .mat-row {
+      .mat-cell {
+        padding: 10px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+.filter-width {
+  // margin-right: 30px;
+  .mat-form-field {
+    display: block !important;
+    .mat-form-field-wrapper {
+      .mat-form-field-flex {
+        .mat-form-field-infix {
+          width: 100px !important;
+        }
+      }
+    }
+  }
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.title-border {
+  border-bottom: 0.5px solid $border-color;
+  padding: 2px;
+  margin-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-top{
+  top: 0.75rem;
+}
+
+mat-dialog-content.mat-typography.mat-dialog-content {
+  overflow: unset !important;
+}
+
+.no-record{
+    text-align: center;
+    padding-top: 10px;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// .cdk-global-overlay-wrapper, 
+.cdk-overlay-container { z-index: 9999!important; } 

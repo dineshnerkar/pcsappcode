@@ -1,0 +1,128 @@
+@charset "utf-8";
+@import "../../color-variable.scss";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+.reprint {
+  tr.example-detail-row {
+    height: 0;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  .overdue {
+    background-color: #f0c7c7;
+  }
+  .updateLink {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+  }
+
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+
+  .example-element-description {
+    padding: 16px;
+  }
+
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+
+  .btn-pos {
+    position: relative;
+    top: 3.3rem;
+    .btn-width {
+      width: 7rem;
+      margin-left: 15px;
+    }
+  }
+
+  .title-border {
+    border-bottom: 0.5px solid lightgrey;
+    padding: 2px;
+    margin-bottom: 20px;
+  }
+
+  .fade-bg {
+    display: block;
+    background: #00000050;
+  }
+
+  .maxSizeModel {
+    max-width: 95%;
+  }
+  .mat-table {
+    width: 100%;
+  }
+
+  .cdk-overlay-container,
+  .cdk-overlay-pane {
+    z-index: 9999 !important;
+  }
+  .ellipsis {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .reprint-table {
+    .mat-table {
+      .mat-header-row {
+        background-color: $orange-color;
+        border-bottom: 2px solid $black-color;
+        .mat-header-cell {
+          color: $black-color;
+          padding: 10px;
+          font-weight: 400;
+          font-size: 12px;
+        }
+      }
+      .mat-row {
+        .mat-cell {
+          padding: 10px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+  .custom-label {
+    color: rgba(0, 0, 0, 0.54);
+  }
+  .fa-icon {
+    font-size: 30px;
+    cursor: pointer;
+  }
+}
+.example-full-width {
+  width: 100%;
+}

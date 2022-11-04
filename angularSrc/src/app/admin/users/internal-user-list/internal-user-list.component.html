@@ -1,0 +1,111 @@
+<div *ngIf="loading" class="loader-wrapper">
+  <div class="loader">{{'internal-user-list-component.Loading' | translate}}</div>
+</div>
+<div class="main-container internal-user-list">
+  <div class="container-fluid">
+    <div class="box-wrapper">
+      <div class="d-flex">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>{{'internal-user-list-component.internal-user-list' | translate}}</h3>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4" align="right">
+              <button mat-icon-button type="button" class="button" aria-label="add icon"
+                matTooltip="{{'internal-user-list-component.Create-New-Internal-User' | translate}}"
+                (click)="openAddInternalUserDialog()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="title-border"></div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field class="full-width">
+              <mat-label>{{'internal-user-list-component.user-name' | translate}}
+              </mat-label>
+              <input type="text" maxlength="70" matInput [(ngModel)]="internalUserListFilter.user" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field class="full-width">
+              <mat-label>{{'internal-user-list-component.roles' | translate}}</mat-label>
+              <mat-select multiple [(ngModel)]="internalUserListFilter.roles">
+                <mat-option *ngFor="let role of roles" [value]="role.value">{{role.label}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4" align="right">
+            <div class="align-btn">
+              <button mat-icon-button type="button" class="button mr-2"
+                matTooltip=" {{'internal-user-list-component.apply-filter' | translate}}"
+                (click)="getAddedInternalUser()">
+                {{'internal-user-list-component.apply-filter' | translate}}
+              </button>
+              <button mat-icon-button type="button" class="button"
+                matTooltip=" {{'internal-user-list-component.clear-filter' | translate}}" (click)="clearFilter()">
+                {{'internal-user-list-component.clear' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="print-table">
+        <table mat-table table [dataSource]="userList" multiTemplateDataRows class="mat-elevation-z8">
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.first-name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.last-name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.user-name' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.email-id' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+          </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.role' | translate}}</th>
+            <td mat-cell *matCellDef="let element;let i=index">
+              {{element.roles.imp_controlled_print_coordinator ? 'Controlled Print Coordinator,':''}}
+              {{element.roles.imp_controlled_print_reprint ? 'Controlled Print Reprint,':''}}
+              {{element.roles.imp_controlled_print_only ? 'Controlled Print Only,':''}}
+              {{element.roles.imp_reconciliation ? 'Reconciliation,':''}}
+              {{element.roles.imp_issued_print_coordinator ? 'Issued Print Coordinator,':''}}
+              {{element.roles.imp_issued_print_reprint ? 'Issued Print Reprint,':''}}
+              {{element.roles.imp_issued_print_only ? 'Issued Print Only,':''}}
+              {{element.roles.imp_admin ? 'Admin,':''}}
+              {{element.roles.imp_recipient ? 'Recipient Only':''}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{'internal-user-list-component.actions' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button type="button" class="button mr-2" aria-label="edit icon"
+                (click)="openAddInternalUserDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" class="button" aria-label="delete icon"
+                (click)="deleteInternalUser(element)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row">
+          </tr>
+        </table>
+        <div class="no-record" *ngIf="userList.length === 0">
+          {{'internal-user-list-component.No-records-found' | translate}}</div>
+      </div>
+    </div>
+  </div>
+</div>

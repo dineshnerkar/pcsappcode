@@ -1,0 +1,26 @@
+.internal-user-list {
+  .print-table {
+    table {
+      width: 100%;
+      margin-top: 20px;
+
+      .mat-header-cell {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .mat-cell {
+        font-size: 16px;
+      }
+    }
+  }
+  .align-btn{
+    margin-top: 16px;
+  }
+}
+
+.internal-user-popup {
+  .mat-checkbox ~ .mat-checkbox {
+    margin-left: 16px;
+  }
+}

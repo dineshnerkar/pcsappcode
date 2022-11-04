@@ -1,0 +1,22 @@
+<form class="internal-user-popup" (ngSubmit)="updateInternalUserCount()" #form="ngForm">
+    <div class="d-flex">
+        <div>
+            <h3>{{'admin.active-dialog-modal-component.Active-internal-user-count'| translate}}</h3>
+        </div>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="box-wrapper">
+            <mat-form-field class="full-width">
+                <mat-label>{{'admin.active-dialog-modal-component.Enter-Number'| translate}}</mat-label>
+                <input type="number" [min]="1" [max]='5'matInput [(ngModel)]="intUserCount" required name="activeCountNumber"
+                    #activeCountNumber='ngModel' />
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-button mat-dialog-close type="button" class="button mr-2">{{'admin.active-dialog-modal-component.Cancel'|
+            translate}}</button>
+        <button mat-button (disabled)="form.valid" [type]="'submit'" cdkFocusInitial
+            class="button">{{'admin.active-dialog-modal-component.Save'| translate}}</button>
+    </mat-dialog-actions>
+</form>

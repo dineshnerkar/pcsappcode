@@ -1,0 +1,4 @@
+sudo docker build -t doc-py .
+sudo docker run -d -it -p 5050:5050 --name=documentum_py_server doc-py
+sudo docker ps -a
+sudo docker system prune --all

@@ -1,0 +1,86 @@
+<div *ngIf="loading" class="loader-wrapper">
+  <div class="loader">{{'admin.internalUser.Loading' | translate}}</div>
+</div>
+<form class="internal-user-popup" #form="ngForm" (ngSubmit)="addUser()">
+  <div class="d-flex">
+    <div>
+      <h3 *ngIf="!isUpdate">{{'admin.internalUser.Add-New-Internal-User' | translate}}</h3>
+      <h3 *ngIf="isUpdate">{{'admin.internalUser.Update-Internal-User' | translate}}</h3>
+    </div>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <div class="box-wrapper">
+      <mat-form-field class="full-width">
+        <mat-label>{{'admin.internalUser.Internal-User' | translate}}</mat-label>
+        <input [disabled]="isUpdate" maxlength="70" type="text" matInput required [(ngModel)]="user"
+          [matAutocomplete]="auto" (ngModelChange)="filterRecipientsList()" name="userName" #userName="ngModel">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
+          <mat-option *ngFor="let recipient of recipients | async" [value]="recipient">
+            {{recipient.label}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-error *ngIf="error.userName === 'required'">
+        {{'admin.internalUser.Internal-User-Name-is-required' | translate}}
+      </mat-error>
+      <mat-label>{{'admin.internalUser.Roles' | translate}}:</mat-label>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_issued_print_coordinator" name="imp_issued_print_coordinator">
+            {{'admin.internalUser.Issued-Print-Coordinator' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_controlled_print_coordinator" name="imp_controlled_print_coordinator">
+            {{'admin.internalUser.Controlled-Print-Coordinator' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_issued_print_reprint" name="imp_issued_print_reprint">
+            {{'admin.internalUser.Issued-Print-Reprint' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_controlled_print_reprint" name="imp_controlled_print_reprint">
+            {{'admin.internalUser.Controlled-Print-Reprint' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_issued_print_only" name="imp_issued_print_only">
+            {{'admin.internalUser.Issued-Print-Only' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_controlled_print_only" name="imp_controlled_print_only">
+            {{'admin.internalUser.Controlled-Print-Only' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_reconciliation" name="imp_reconciliation">
+            {{'admin.internalUser.Reconciliation' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_admin" name="imp_admin">
+            {{'admin.internalUser.Admin' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox [(ngModel)]="roles.imp_recipient" name="imp_recipient">
+            {{'admin.internalUser.Recipient' | translate}}
+          </mat-checkbox>
+        </div>
+        
+        <mat-error *ngIf="error.roles === 'required'">
+          {{'admin.internalUser.Internal-User-Role-is-required' | translate}}
+        </mat-error>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close type="button" class="button mr-2">{{'admin.internalUser.Cancel' |
+      translate}}</button>
+    <button mat-button [type]="'submit'" [disabled]="form.invalid" cdkFocusInitial class="button">{{'admin.internalUser.Save' |
+      translate}}</button>
+  </mat-dialog-actions>
+</form>

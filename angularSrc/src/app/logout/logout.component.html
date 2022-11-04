@@ -1,0 +1,12 @@
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="box-wrapper">
+            <div class="d-flex">
+                <div class="col-md-8 offset-md-1">
+                    <h3 *ngIf="user"> {{'logout.sessionExpired'| translate}}</h3>
+                    <h3 *ngIf="!user">{{'logout.unAuthorized'| translate}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

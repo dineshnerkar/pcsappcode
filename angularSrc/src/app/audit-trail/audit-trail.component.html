@@ -1,0 +1,242 @@
+<div *ngIf="loader" class="loader-wrapper">
+  <div class="loader">{{'audit-trail-component.Loading'| translate}}</div>
+</div>
+
+<div class="main-container audit">
+  <div class="container-fluid">
+    <div class="box-wrapper">
+      <div class="d-flex">
+        <div class="col-md-6">
+        <h3>{{(printType === commonConstant.PrintTypes.IP ?'audit-trail-component.Issued' :
+          'audit-trail-component.Controlled') | translate}} {{'audit-trail-component.Prints-Audit' | translate}}</h3>
+      </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-1" (click)="downloadReport()">
+            <i class="fa fa-file-excel-o fa-icon" matTooltip="{{'audit-trail-component.downloadAsExcel' | translate}}" [ngStyle]="{'color':'green'}" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-1" (click)="downloadAsPDF()">
+            <i class="fa fa-file-pdf-o fa-icon" [ngStyle]="{'color':'red'}" matTooltip="{{'audit-trail-component.downloadAsPdf' | translate}}" aria-hidden="true"></i>
+          </div>
+          <div class="col-md-1">
+  
+        </div>
+      </div>
+      <div class="title-border"></div>
+      <form name="myForm" #f="ngForm" novalidate>
+        <div class="row">
+          <div class="col-md-2 filter-width">
+            <mat-form-field class="example-full-width">
+              <mat-label>{{'audit-trail-component.documentName' | translate }}
+              </mat-label>
+              <input matInput name="documentName" placeholder="{{'audit-trail-component.documentName'| translate}}"
+                [(ngModel)]="filterObj.documentName"/>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field class="example-full-width">
+              <mat-label>{{'audit-trail-component.revision' | translate }}
+              </mat-label>
+              <input matInput name="revision" placeholder="{{'audit-trail-component.revision'| translate}}"
+                [(ngModel)]="filterObj.revision"/>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field class="example-full-width">
+              <mat-label>{{'audit-trail-component.printNumber' | translate }}
+              </mat-label>
+              <input matInput name="printNumber" placeholder="{{'audit-trail-component.printNumber'| translate}}"
+                [(ngModel)]="filterObj.printNumber" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field class="example-full-width">
+              <mat-label>{{'audit-trail-component.Recipients' | translate}}</mat-label>
+              <input matInput name="recipientFil" [(ngModel)]="filterObj.recipient"/>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field class="example-full-width">
+              <mat-label>{{'audit-trail-component.Print-Owner' | translate}}</mat-label>
+              <input matInput name="Print_Owner" [(ngModel)]="filterObj.printOwner"
+                [matAutocomplete]="PrintOwner" (ngModelChange)="filterPrintOwnerList()" />
+              <mat-autocomplete #PrintOwner="matAutocomplete">
+                <mat-option *ngFor="let item of printOwnerList | async" [value]="item.value">
+                  {{ item.label }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 filter-width">
+            <mat-form-field>
+              <mat-label>{{'audit-trail-component.Status'| translate}}</mat-label>
+              <mat-select name="status" [(ngModel)]="filterObj.printStatus" placeholder="{{'audit-trail-component.Status' | translate}}">
+                <mat-option [value]="'Failed'">{{'audit-trail-component.Failed'| translate}}</mat-option>
+                <mat-option [value]="'Successful'">{{'audit-trail-component.Successful'| translate}}</mat-option>
+                <mat-option [value]="'Requested'">{{'audit-trail-component.Requested'| translate}}</mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.IP" [value]="'Reconciled'">
+                  {{'audit-trail-component.Reconciled' | translate}}
+                </mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.IP" [value]="'Partial Reconciliation'">
+                  {{'audit-trail-component.Partial-Reconciliation' | translate}}
+                </mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.CP" [value]="'Complete'">
+                  {{'audit-trail-component.Complete' | translate}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field>
+              <mat-label>{{'audit-trail-component.Event'| translate}}</mat-label>
+              <mat-select name="status" [(ngModel)]="filterObj.type" placeholder="{{'audit-trail-component.Status' | translate}}">
+                <mat-option [value]="'Print'">{{'audit-trail-component.Print' |translate}}</mat-option>
+                <mat-option [value]="'Reprint'">{{'audit-trail-component.RePrint'| translate}}</mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.IP" [value]="'Reconcile'">
+                  {{'audit-trail-component.Reconcile' | translate}}
+                </mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.IP" [value]="'Due Date Update'">
+                  {{'audit-trail-component.DueDateUpdate' | translate}}
+                </mat-option>
+                <mat-option *ngIf="printType === commonConstant.PrintTypes.CP" [value]="'Recall'">{{'audit-trail-component.Recall'
+                  | translate}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field>
+              <mat-label>{{'audit-trail-component.Start-Date' | translate}}</mat-label>
+              <input [(ngModel)]="filterObj.startDate" name="sDate" matInput [matDatepicker]="startPicker"
+                placeholder="{{'audit-trail-component.date'| translate}}">
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 filter-width">
+            <mat-form-field>
+              <mat-label>{{'audit-trail-component.End-Date'| translate}}</mat-label>
+              <input [(ngModel)]="filterObj.endDate" name="eDate" matInput [matDatepicker]="endPicker"
+                placeholder="{{'audit-trail-component.date'| translate}}" [disabled]="!filterObj.startDate">
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <div class="text-right d-flex">
+              <button type="submit" [disabled]="f.invalid" (click)="applyFilter()" class="button btn-width">
+                {{'audit-trail-component.Apply-Filter'| translate}}
+              </button>
+              <button type="button" (click)="clearFilter()" class="button btn-width">
+                {{'audit-trail-component.Clear'| translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="print-table" [ngClass]="{'print-table-a':printType === 'IP', 'print-table-b': printType === 'IP'}" role="document" >
+        <table mat-table table [dataSource]="documentList" multiTemplateDataRows class="mat-elevation-z8">
+          <ng-container matColumnDef="controlled_copy">
+            <th mat-header-cell width="10%" *matHeaderCellDef>
+              {{(printType === commonConstant.PrintTypes.IP ? 'audit-trail-component.Issued-Print-Number' :
+              'audit-trail-component.Controlled-Print-Number') | translate}}
+            </th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#controlled_copy"]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Event'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#type"]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Print_Owner">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Print-Owner' | translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#printOwner"].name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="printer">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Printer-Name'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#printer"]}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Recipient">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Recipient' | translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#recipient"].name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Reason">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Reason'| translate}}</th>
+            <td mat-cell width="10%" matTooltip="{{element['#printReason']}}" [matTooltipPosition]="'above'" class="ellipsis" *matCellDef="let element"> {{element["#printReason"]}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="profile">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Print-Profile' | translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#profile"]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="userInput">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.User-Input' |translate}}</th>
+            <td mat-cell width="10%" matTooltip="{{element['userInput']}}" [matTooltipPosition]="'above'" class="ellipsis" *matCellDef="let element"> {{element["userInput"]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Print_Date">
+            <th mat-header-cell width="15%" *matHeaderCellDef>{{'audit-trail-component.Event-Date-Time' | translate}}</th>
+            <td mat-cell width="15%" *matCellDef="let element">
+              {{element["#printDateTime"] | date:'d/M/yyyy, h:mm:ss a'}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Print_pages">
+            <th mat-header-cell width="15%" *matHeaderCellDef>{{'audit-trail-component.Reprint-Pages'| translate}}</th>
+            <td mat-cell width="15%" *matCellDef="let element">
+              {{element["#pages"] ? (element["#pages"]) : '-'}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Print_Status">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Print-Status'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["#printStatus"] ? element["#printStatus"] :
+              'Failed'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="recall_comment">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Recall-Comments'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["comment"] ? element["comment"]
+              :
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Update_overdue_date">
+            <th mat-header-cell width="15%" *matHeaderCellDef>{{'audit-trail-component.Due-Date' | translate}}</th>
+            <td mat-cell width="15%" *matCellDef="let element">
+              {{element["#overdueUpdateDate"] | date:'d/M/yyyy'}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="reconcile_comment">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Reconcile-Comments'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["comment"] ? element["comment"]
+              :
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reconcile_printReturned">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Reconcile-printReturned'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["printReturned"] ? element["printReturned"]
+              :
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reconcile_deviationNumber">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Reconcile-deviationNumber'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["deviationNumber"] ? element["deviationNumber"]
+              :
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="reconcile_outcomeStatus">
+            <th mat-header-cell width="10%" *matHeaderCellDef>{{'audit-trail-component.Reconcile-outcomeStatus'| translate}}</th>
+            <td mat-cell width="10%" *matCellDef="let element"> {{element["outcomeStatus"] ? element["outcomeStatus"]
+              :
+              '-'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+          </tr>
+        </table>
+      </div>
+      <mat-paginator (page)="handlePageEvent($event)" [length]="paginatorKeys.count"
+        [pageSize]="paginatorKeys.pageSize" [pageIndex]="paginatorKeys.pageIndex">
+      </mat-paginator>
+    </div>
+  </div>

@@ -1,0 +1,60 @@
+@import "../../../color-variable.scss";
+
+.dash-main {
+  padding: 6rem 0.9375rem 3.5rem 0.9375rem;
+  background-color: $white-color;
+  height: 100vh;
+  width: 100%;
+  .box-wrapper {
+    padding: 3rem 2rem 2rem 2rem;
+    border: 0.0625rem solid $border-color;
+    -webkit-box-shadow: 0.0625rem 0.0625rem 0.625rem 0 $box-shadow-color;
+    box-shadow: 0.0625rem 0.0625rem 0.625rem 0 $box-shadow-color;
+    background-color: $white-color;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    .print-info {
+      padding: 2rem 2rem;
+      .print-btn {
+        width: 100%;
+        font-size: 0.875rem;
+        line-height: 32px;
+      }
+    }
+  }
+  .example-card {
+    max-width: 300px;
+    margin-bottom: 20px;
+    border: 0.0625rem solid $border-color;
+    -webkit-box-shadow: 0.0625rem 0.0625rem 0.625rem 0 $box-shadow-color;
+    box-shadow: 0.0625rem 0.0625rem 0.625rem 0 $box-shadow-color;
+    background-color: $white-color;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .active-class:hover {
+    text-decoration: underline;
+  }
+  .example-card:hover {
+    background-color: $background-hover-color;
+    color: $black-color;
+    cursor: pointer;
+    transform: scale(1);
+    opacity: 1;
+    transition: width 2s, height 4s;
+  }
+  .mat-card-title-group::after {
+    content: "\➤";
+    font-size: 2rem;
+    background: $orange-color;
+    height: 80px;
+    width: 35px;
+    vertical-align: middle;
+    padding: 16px 3px;
+    border-radius: 10px;
+  }
+  mat-card-subtitle.mat-card-subtitle {
+    color: $black-color !important;
+  }
+}

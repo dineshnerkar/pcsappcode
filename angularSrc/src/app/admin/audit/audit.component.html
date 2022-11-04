@@ -1,0 +1,78 @@
+<div *ngIf="isLoading" class="loader-wrapper">
+    <div class="loader">{{'reprint-component.Loading' | translate}}</div>
+</div>
+<div class="main-container admin-audit">
+    <div class="container-fluid">
+        <div class="box-wrapper">
+            <div class="d-flex">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>{{'admin.audit.adminAudit'| translate}}</h3>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-1" (click)="downloadReport()">
+                          <i class="fa fa-file-excel-o fa-icon" matTooltip="{{'admin.audit.downloadAsExcel' | translate}}" [ngStyle]="{'color':'green'}" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-md-1" (click)="downloadAsPDF()">
+                          <i class="fa fa-file-pdf-o fa-icon" [ngStyle]="{'color':'red'}" matTooltip="{{'admin.audit.downloadAsPdf' | translate}}" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                    <div class="title-border"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <mat-form-field class="full-width">
+                            <mat-label>{{'admin.audit.adminAuditType'| translate}}</mat-label>
+                            <input type="text" maxlength="70" matInput [(ngModel)]="adminAuditFilter.type">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 button-top">
+                        <button mat-icon-button type="button"
+                            matTooltip="{{'profile-list-component.Apply-Filter' | translate}}" class="button mr-2"
+                            (click)="getAdminAudit()">
+                            {{'profile-list-component.Apply-Filter' | translate}}
+                        </button>
+                        <button mat-icon-button type="button"
+                            matTooltip="{{'profile-list-component.Clear-Filter' | translate}}" class="button"
+                            (click)="getAdminAudit()">
+                            {{'profile-list-component.Clear' | translate}}
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="print-table">
+                <table mat-table table [dataSource]="auditList" multiTemplateDataRows class="mat-elevation-z8">
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef>{{'admin.audit.eventType'| translate}}</th>
+                        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{'admin.audit.value'| translate}}</th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="updatedAt">
+                        <th mat-header-cell *matHeaderCellDef>{{'admin.audit.eventDateTime'| translate}}</th>
+                        <td mat-cell *matCellDef="let element"> {{element.updatedAt | date:'d/M/yyyy, h:mm:ss a' }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="updatedBy">
+                        <th mat-header-cell *matHeaderCellDef>{{'admin.audit.owner'| translate}}</th>
+                        <td mat-cell *matCellDef="let element"> {{element.updatedBy}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row">
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

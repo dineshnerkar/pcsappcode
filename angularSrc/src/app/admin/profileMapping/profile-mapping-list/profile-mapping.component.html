@@ -1,0 +1,62 @@
+<div *ngIf="loading" class="loader-wrapper">
+    <div class="loader">{{'printer-list-component.Loading' | translate}}</div>
+</div>
+<div class="d-flex">
+    <div>
+        <h3 *ngIf="!isUpdate">{{'profile-mapping-component.Add-Mapping' | translate}}</h3>
+        <h3 *ngIf="isUpdate">{{'profile-mapping-component.Update-Mapping' | translate}}</h3>
+    </div>
+</div>
+<form (ngSubmit)="saveMapping()" #form="ngForm">
+    <mat-dialog-content class="mat-typography">
+        <div class="box-wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="full-width">
+                        <mat-label>{{'profile-mapping-component.Profile-Name' | translate}}</mat-label>
+                        <input type="text" maxlength="70" matInput required [(ngModel)]="profileDocumentMapping.profile"
+                            [matAutocomplete]="profileAuto" name="profile" [disabled]="isUpdate" (ngModelChange)="filterProfileName()">
+                        <mat-autocomplete #profileAuto="matAutocomplete" [displayWith]="displayName">
+                            <mat-option *ngFor="let option of profileOptions | async" [value]="option">
+                                {{option.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                     
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="full-width">
+                        <mat-label>{{'profile-mapping-component.Document-Type' | translate}}</mat-label>
+                        <mat-chip-list #dropDown aria-label="Dropdown Option">
+                            <mat-chip *ngFor="let option of profileDocumentMapping.documents; let i=index"
+                                (removed)="removeSelectOptions(option)">
+                                {{option.name}}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip>
+                            <input placeholder="{{'profile-mapping-component.Document-Type' | translate}}"
+                                [formControl]="fruitCtrl" #fruitInput [matChipInputFor]="dropDown"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matAutocomplete]="auto"
+                                (matChipInputTokenEnd)="addSelectOptions($event)"
+                                (ngModelChange)="filterDocumentName($event)">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                <mat-option *ngFor="let document of documentOptions | async" [value]="document">
+                                    {{ document.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            
+                        </mat-chip-list>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="center">
+        <button mat-button mat-dialog-close type="button" class="button mr-2">{{'profile-mapping-component.Cancel' |
+            translate}}</button>
+        <button mat-button [type]="'submit'" [disabled]="form.invalid" cdkFocusInitial
+            class="button">{{'profile-mapping-component.Save' |
+            translate}}</button>
+    </mat-dialog-actions>
+</form>

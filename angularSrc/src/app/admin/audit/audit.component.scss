@@ -1,0 +1,21 @@
+.admin-audit {
+  .fa-icon {
+    font-size: 30px;
+    cursor: pointer;
+  }
+  .print-table {
+    table {
+      width: 100%;
+      margin-top: 20px;
+
+      .mat-header-cell {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .mat-cell {
+        font-size: 16px;
+      }
+    }
+  }
+}

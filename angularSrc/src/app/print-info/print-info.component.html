@@ -1,0 +1,249 @@
+<div class="main-container">
+    <div *ngIf="isLoading" class="loader-wrapper">
+        <div class="isLoading">Loading...</div>
+    </div>
+    <div class="container-fluid">
+        <div class="box-wrapper">
+            <div class="d-flex">
+                <div class="col-md-8 offset-md-1">
+                    <h3>{{(printType === 'IP' ? 'reprint-component.Issued' : 'reprint-component.Controlled') | translate
+                        }}
+                        {{'print-info-component.Print-Request' | translate}} <span *ngIf="isUpdate"> : {{
+                            'print-info-component.Reprint'| translate}}</span></h3>
+                </div>
+            </div>
+            <form name="printForm" #f="ngForm" novalidate>
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="row">
+                            <div class="col-md-9" *ngIf="isUpdate">
+                                <mat-label> {{printType === 'IP' ? 'IPS' : 'CPS'}} {{'print-info-component.Print-Number'
+                                    | translate}} : </mat-label>
+                                {{documentInfo.Controlled_Print}}
+                            </div>
+                            <div class="col-md-3" *ngIf="isUpdate">
+
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="example-chip-list">
+                                    <mat-label>{{'print-info-component.Select-Printer'| translate}}</mat-label>
+                                    <mat-select name="printer" [(ngModel)]="selectedPrinter" required>
+                                        <mat-option *ngFor="let printer of printerList" [value]="printer">
+                                            {{printer}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>{{'print-info-component.Please-Select-Printer' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="example-chip-list">
+                                    <mat-label>{{'print-info-component.Select-Print-Profile'| translate}}</mat-label>
+                                    <mat-select required [(ngModel)]="profile" name="profile"
+                                        (selectionChange)="onOptionsSelected()">
+                                        <mat-option *ngFor="let profile of printProfile" [value]="profile.name">
+                                            {{ profile.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>{{'print-info-component.Please-Select-Print-Profile'| translate}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6" *ngIf="isUpdate">
+                                <mat-label>{{'print-info-component.Recipient'| translate}} :</mat-label>
+                                {{recipient.name}}
+                            </div>
+                            <div class="col-md-6" *ngIf="isUpdate">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>{{'print-info-component.Page-To-Print'| translate}}</mat-label>
+                                    <input matInput name="page_Count" pattern="^[0-9-,]+$" #pageToPrint="ngModel"
+                                        [(ngModel)]="pages" />
+                                    <mat-error *ngIf="pageToPrint.errors?.pattern">
+                                        {{'print-info-component.Invalid-Input'| translate}}</mat-error>
+                                </mat-form-field>
+                                <div style="font-size: 13px; font-style: italic;" *ngIf="isUpdate">
+                                    {{'print-info-component.Pages-Available' |
+                                    translate}} : {{documentInfo["#pageCount"]}} <a href="javascript:void(0)"
+                                        (click)="showNoteToggle()" style="color:blue; cursor: pointer;">?</a>
+                                    <div class="col-md-12" *ngIf="showNote"
+                                        style="font-size: 13px; font-style: italic;color: indianred;padding-left: 0px; padding-right: 0px">
+                                        {{'print-info-component.Note' |translate}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" *ngIf="!isUpdate">
+                                <mat-form-field class="example-chip-list">
+                                    <mat-label>{{'print-info-component.Internal-Recipient' | translate}}</mat-label>
+                                    <mat-chip-list #chipList aria-label="recipient selection">
+                                        <mat-chip *ngFor="let recipient of recipients" [selectable]="selectable"
+                                            [removable]="removable" (removed)="remove(recipient)" [disabled]="isUpdate">
+                                            {{ recipient }}
+                                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                        </mat-chip>
+                                        <input [disabled]="isUpdate"
+                                            placeholder="{{'print-info-component.New-recipient' | translate}}" required
+                                            #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            (matChipInputTokenEnd)="add($event)" />
+                                    </mat-chip-list>
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                        <mat-option *ngFor="let recipient of internalRecipient | async"
+                                            [value]="recipient.value">
+                                            {{ recipient.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6" *ngIf="!isUpdate">
+                                <mat-form-field class="example-chip-list">
+                                    <mat-label>{{'print-info-component.External-Recipient' | translate}}</mat-label>
+                                    <mat-chip-list #chipList1 aria-label="recipient selection 1">
+                                        <mat-chip *ngFor="let externalRecipient of externalRecipients"
+                                            [selectable]="selectable" [removable]="removable"
+                                            (removed)="remove1(externalRecipient)" [disabled]="isUpdate">
+                                            {{ externalRecipient }}
+                                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                        </mat-chip>
+                                        <input [disabled]="isUpdate"
+                                            placeholder="{{'print-info-component.New-recipient' | translate}}" required
+                                            #externalRec [formControl]="externalRecpt" [matAutocomplete]="auto1"
+                                            [matChipInputFor]="chipList1"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            (matChipInputTokenEnd)="add1($event)" />
+                                    </mat-chip-list>
+                                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selected1($event)">
+                                        <mat-option *ngFor="let externalRecipient of externalRecipient | async"
+                                            [value]="externalRecipient.value">
+                                            {{ externalRecipient.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-9" style="font-size: 13px; font-style: italic;color: indianred;"
+                                *ngIf="!isUpdate">
+                                {{'print-info-component.Note2' | translate}}
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>{{'print-info-component.Reason-for'|translate}} {{(isUpdate?
+                                        'print-info-component.Re-Printing' : 'print-info-component.Printing') |
+                                        translate }}</mat-label>
+                                    <input type="text" matInput required name="Reason" [(ngModel)]="ReasonForPrinting"
+                                        [matAutocomplete]="auto2" (ngModelChange)="doFilter()" />
+                                    <mat-autocomplete #auto2="matAutocomplete">
+                                        <mat-option *ngFor="let reason of reasonForPrint | async"
+                                            [value]="reason.label">
+                                            {{ reason.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error>{{'print-info-component.Please-Select-Reason-for Printing' | translate}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6" *ngIf="!isUpdate && printType === 'IP'">
+                                <mat-form-field>
+                                    <mat-label>{{'print-info-component.Due-Date' | translate}}</mat-label>
+                                    <input [(ngModel)]="dueDate" name="dDate" [min]="todayDate" matInput
+                                        [matDatepicker]="startPicker"
+                                        placeholder="{{'print-info-component.date'| translate}}">
+                                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #startPicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6" *ngIf="!isUpdate && printType === 'IP'">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>{{'print-info-component.No-of-Prints' | translate}}</mat-label>
+                                    <input type="number" matInput required [min]="1" name="noOfPrint" [max]="20"
+                                        [(ngModel)]="NoOfPrinting" #noOfPrinting="ngModel" />
+                                    <mat-error *ngIf="noOfPrinting.invalid && noOfPrinting.hasError('required')">
+                                        {{'print-info-component.Please-Enter-no-of-prints' | translate}}
+                                    </mat-error>
+                                    <mat-error *ngIf="noOfPrinting.invalid && !noOfPrinting.hasError('required')">
+                                        {{'print-info-component.Please-Enter-no-of-prints-upto-max' | translate}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="profileFields">
+                            <ng-container *ngFor="let item of profileFields">
+                                <div class="col-md-6" *ngIf="item.show">
+                                    <mat-form-field class="example-full-width" *ngIf="item.type == 'Text'">
+                                        <mat-label>{{item.name}}</mat-label>
+                                        <input matInput name="{{item.name}}" [(ngModel)]="item.value"
+                                            [required]="item.validation === 'Required' ? true : false" />
+                                        <mat-error>{{'print-info-component.Please-Select-userIp1' | translate}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="example-full-width" *ngIf="item.type == 'Dropdown'">
+                                        <mat-label>{{item.name}}</mat-label>
+                                        <mat-select name="{{item.name}}" [(ngModel)]="item.value"
+                                            [required]="item.validation === 'Required' ? true : false">
+                                            <mat-option *ngFor="let option of item.selectOptions"
+                                                [value]="option.label">
+                                                {{option.label}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>{{'print-info-component.Please-Select-userIp1' | translate}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            <div class="col-md-6" *ngIf="isBatchNumberApplicable">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>{{'print-info-component.is-Batch-Number-Applicable' | translate }}
+                                    </mat-label>
+                                    <input matInput name="batchNumberApplicable" [(ngModel)]="batchNumber" required />
+                                    <mat-error>{{'print-info-component.Please-Select-batch-number' | translate}}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="gray-separator"></div>
+                        <div class="text-right">
+                            <button type="submit" (click)="print()"
+                                [disabled]="( !recipient && !this.recipients.length && !this.externalRecipients.length ) || f.invalid || (NoOfPrinting < 1)"
+                                class="button">
+                                {{'print-info-component.Print-Document' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade-bg" *ngIf="showPopup">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{'print-info-component.Confirmation-Box' |
+                        translate}}
+                    </h5>
+                    <button type="button" class="close" (click)="showPopup = false">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="verifyRecipientData.length">
+                        <h3><b>{{'print-info-component.h3b1' | translate}}</b></h3> <br>
+                        <div class="recipient-box" *ngFor="let item of verifyRecipientData"> {{item}}
+                            <a class="close-icon">
+                                <span class="cancel-icon"></span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="button"
+                            (click)="sendPrintReq();showPopup = false">{{'notification-components.Continue' |
+                            translate}}</button>
+                        <button type="button" (click)="showPopup = false"
+                            class="button">{{'notification-components.Cancel'
+                            | translate}}</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

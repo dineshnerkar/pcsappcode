@@ -1,0 +1,24 @@
+.admin-profile {
+  .print-table {
+    table {
+      width: 100%;
+      margin-top: 20px;
+
+      .mat-header-cell {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .mat-cell {
+        font-size: 16px;
+      }
+    }
+  }
+  mat-expansion-panel:first-child 
+    // .mat-accordion>:first-child:not(.mat-expansion-panel) 
+    // .mat-expansion-panel-spacing
+  {
+    // .mat-expansion-panel:not(:first-child){
+    top: 0.75rem;
+  }
+}
